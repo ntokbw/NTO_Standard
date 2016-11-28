@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="FB_Object" Id="{7ae2b3bc-6889-427a-82e4-66c1a0f4f97f}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+///Object base FB for all FB's
+FUNCTION_BLOCK FB_Object IMPLEMENTS I_Object
+VAR
+    sName : STRING(50) := 'FB_Object'; //FB Name
+    sVersion : STRING(8) := '1.0.0.0'; //FB Version
+    bFirstPass : BOOL := FALSE; //First pass done
+    bError : BOOL := FALSE; //Error
+    nErrorID : DWORD := 0; //Error id
+    aErrors : T_ErrorHistory; //Error history
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="AddError" Id="{26aececa-6134-4ea0-b147-75cddd786a49}">
+      <Declaration><![CDATA[///Add error to error history
+METHOD PROTECTED AddError
+VAR_INPUT
+	nErrorID : DWORD; //Error ID
+END_VAR
+VAR
+	nAddErrorLoop : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR nAddErrorLoop := GVL_ObjectSetup.cErrorHistMax TO (GVL_ObjectSetup.cErrorHistMin + 1) BY -1 DO
+	aErrors[nAddErrorLoop] := aErrors[nAddErrorLoop - 1];
+END_FOR
+aErrors[GVL_ObjectSetup.cErrorHistMin] := nErrorID;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{b1c46935-f116-4df7-8461-83771a2e39a0}">
+      <Declaration><![CDATA[///Control, override to get cyclic task in FB
+METHOD INTERNAL Control
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CycleTask" Id="{eb714de1-926f-48dc-8981-1ce3b30d9fbe}">
+      <Declaration><![CDATA[//Cycle Task, do not override this methode cyclic code is placed in M_Control 
+METHOD CycleTask
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT(bFirstPass) THEN
+    bFirstPass := Init() = GVL_HResultSuccess.cHR_SuccesDone;
+    IF NOT(bFirstPass) THEN
+        RETURN;
+	END_IF
+END_IF
+Control();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Error" Id="{d41bc890-e3af-4a7c-8e60-f03a1c619e63}">
+      <Declaration><![CDATA[(*Error, do not implement property override*)
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{fafeed1c-814a-4256-ad02-fbf90e5e8080}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := bError;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ErrorID" Id="{63ffb5b2-2ae5-4a47-86b8-36564ac6ed39}">
+      <Declaration><![CDATA[(*error id, do not implement property override*)
+PROPERTY ErrorID : DWORD
+]]></Declaration>
+      <Get Name="Get" Id="{5fa2b1a1-1e53-40b1-ae8d-24fcf2722b11}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorID := nErrorID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Errors" Id="{fcbaa8a8-a2ef-4477-8ff4-d26aef6ce2a5}">
+      <Declaration><![CDATA[(*Pointer to error history, do not implement property override*)
+PROPERTY Errors : POINTER TO T_ErrorHistory
+]]></Declaration>
+      <Get Name="Get" Id="{1c8fbf77-dd85-40e9-bedf-41f1ba55588a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Errors := ADR(aErrors);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_init" Id="{3ab89805-0d3a-421a-8ebd-105e5791755c}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bFirstPass := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Init" Id="{4237cb80-d346-4a7c-938a-6d6c8c793f75}">
+      <Declaration><![CDATA[///Initialize FB, Override to do custom initialize, no need to call super
+METHOD INTERNAL Init : HRESULT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Init := GVL_HResultSuccess.cHR_SuccesDone;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Name" Id="{e3a4abb1-c213-4331-ae82-93a6832e0b2b}">
+      <Declaration><![CDATA[(*Name, do not implement property override*)
+PROPERTY Name : STRING(50)
+]]></Declaration>
+      <Get Name="Get" Id="{19fd6a49-162e-45e7-8066-bac017555338}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Name := sName;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Reset" Id="{9560225a-1cab-4c8f-9ae8-4c6933de2dbc}">
+      <Declaration><![CDATA[(*Reset error, allways call super*)
+METHOD Reset
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[bError := FALSE;
+nErrorID := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetError" Id="{f7b289ae-e020-441f-a57b-6988eb02710a}">
+      <Declaration><![CDATA[///Set error on the Object and add entry to error history
+METHOD PROTECTED SetError
+VAR_INPUT
+	nErrorID : DWORD; //Error ID
+END_VAR
+VAR
+    nSetErrorLoop : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT(bError) THEN
+	bError := TRUE;
+	THIS^.nErrorID := nErrorID;
+	FOR nSetErrorLoop := GVL_ObjectSetup.cErrorHistMax TO (GVL_ObjectSetup.cErrorHistMin + 1) BY -1 DO
+    	aErrors[nSetErrorLoop] := aErrors[nSetErrorLoop - 1];
+	END_FOR
+	aErrors[GVL_ObjectSetup.cErrorHistMin] := nErrorID;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Version" Id="{41ae7693-4c80-4a34-85a8-401771f8ba14}">
+      <Declaration><![CDATA[(*Version,do not implement property override*)
+PROPERTY Version : STRING(8)
+]]></Declaration>
+      <Get Name="Get" Id="{d66ac97e-e833-4f41-bc32-7299379a9627}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Version := sVersion;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

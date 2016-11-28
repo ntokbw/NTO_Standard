@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="ST_SettingMachinePart02" Id="{94b5f7c0-15ba-48e5-82f4-9daf66753890}">
+    <Declaration><![CDATA[TYPE ST_SettingMachinePart02 :
+STRUCT
+    nCylinder1Type : BYTE; //Cylinder type
+    stCylinder1Settings : ST_StandardCylinderSettings;
+    nCylinder2Type : BYTE; //Cylinder type
+    stCylinder2Settings : ST_StandardCylinderSettings;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

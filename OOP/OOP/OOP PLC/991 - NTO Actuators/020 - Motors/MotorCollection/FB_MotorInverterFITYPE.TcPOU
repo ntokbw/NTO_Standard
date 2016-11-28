@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="FB_MotorInverterFITYPE" Id="{3c7209f0-b9f7-45ac-9f9d-3bac5ca649bc}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+FUNCTION_BLOCK FB_MotorInverterFITYPE EXTENDS FB_Object IMPLEMENTS I_StandardMotor
+///In / outputs
+VAR
+    DO_nControlWord AT %Q* : WORD;
+    DO_nSpeed AT %Q* : WORD;
+    DO_nRamp AT %Q* : WORD;
+    DI_nStatusWord AT %I* : WORD;
+    DI_nActSpeed AT %I* : WORD;
+    DI_nCurrent AT %I* : WORD;
+END_VAR
+VAR
+    bMoveCW : BOOL;
+    bMoveCCW : BOOL;
+    bEnable : BOOL;
+    bLimitCW : BOOL;
+    bLimitCCW : BOOL;
+    nAcceleration : UINT;
+    nDeceleration : UINT;
+    nSpeed : UINT;
+    pSettings : POINTER TO ST_StandardMotorSettings;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Acc" Id="{8bef2e5f-62b8-4933-8f1a-cc2282ab8d1f}">
+      <Declaration><![CDATA[(*Accelaration in FI dependent type*)
+PROPERTY Acc : UINT
+]]></Declaration>
+      <Get Name="Get" Id="{a928614c-240d-415e-bae8-f9e1ad7a532f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{efafa568-441c-4fa2-9616-7d84b15d6480}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="CCW" Id="{3ffca1e7-8b58-4cae-90e9-0ae7d4647b03}">
+      <Declaration><![CDATA[(*Move motor CCW*)
+PROPERTY CCW : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{b81f10d4-1f88-43fa-b291-9650293b3062}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b12de18d-2df7-44ef-bd11-c505dd3db4aa}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="Control" Id="{dc1649a8-f607-46d9-a972-2a2c6456765c}">
+      <Declaration><![CDATA[METHOD INTERNAL Control
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[{warning 'Add motor cyclic control implementation'}
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="CW" Id="{5df0c746-ef29-4253-b783-4de645965b2e}">
+      <Declaration><![CDATA[
+(*Move motor CW*)
+PROPERTY CW : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{943f7a23-f8cc-43a8-b6b8-1469fe84a3d3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{df61a862-f597-4955-a0be-9571547a4942}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Dec" Id="{5da5c9f1-fc55-43fb-9192-58640b9d2e22}">
+      <Declaration><![CDATA[(*Deceleration in FI dependent type*)
+PROPERTY Dec : UINT
+]]></Declaration>
+      <Get Name="Get" Id="{41e3b2fd-706d-4e40-898b-e18d5c933a15}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b0374cb7-9273-4c9d-b723-dbd527993d67}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Enable" Id="{881dc42d-6d39-4149-aaa6-2e063a3bb4c5}">
+      <Declaration><![CDATA[
+(*Enable Motor*)
+PROPERTY Enable : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{05ca5d2a-72f1-4651-aa92-da2c235a4612}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{37ad9524-b791-4392-b7bd-3a876a508db3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="FB_init" Id="{31273747-ddea-4c6a-86e8-b24bae2303d7}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	(* if TRUE, the retain variables are initialized (warm start / cold start)*)
+	{attribute '''NORMAL__COMMENT' := ' if TRUE, the retain variables are initialized (warm start / cold start)'}
+	bInitRetains	: BOOL;
+	(* if TRUE, the instance afterwards gets moved into the copy code (online change)*)
+	{attribute '''NORMAL__COMMENT' := ' if TRUE, the instance afterwards gets moved into the copy code (online change)'}
+	bInCopyCode	: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[sName := 'FB_MotorInverterFITYPE';
+sVersion := '1.0.0.0';
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Init" Id="{bc95c770-814f-44f3-8177-eac5062b121b}">
+      <Declaration><![CDATA[///Initialize FB, Override to do custom initialize, no need to call super
+METHOD INTERNAL Init : HRESULT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Init := GVL_HResultSuccess.cHR_SuccesDone;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="LimitCCW" Id="{a1459fea-3dc0-4874-887e-fd3ca00182e0}">
+      <Declaration><![CDATA[(*Limit counter-clockwise rotation*)
+PROPERTY LimitCCW : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{d9aa04f0-56b6-416a-8258-180348b1798f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{ae0ab81a-7ce6-4daa-bed2-30edfe639f15}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="LimitCW" Id="{f6e654af-c24e-4878-9e70-d8b868a03937}">
+      <Declaration><![CDATA[(*Limit clockwise rotation*)
+PROPERTY LimitCW : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{48b98f92-d519-42d5-82f1-7bff25de4a80}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{c7babc60-9758-4ca5-a41b-12d6003352f4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="Reset" Id="{7de3fada-3898-4069-8e2b-6a2d23596bc2}">
+      <Declaration><![CDATA[{attribute '''DOCU__COMMENT' := 'Reset error'}
+(*Reset error*)
+METHOD Reset
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.Reset();
+
+{warning 'Add reset implementation'}]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Settings" Id="{aea8e46a-d3ba-4e4b-a878-eaf4546f344d}">
+      <Declaration><![CDATA[(*Pointer to settings, should be set at FB_init but can be modified with set accessor if needed*)
+PROPERTY Settings : POINTER TO ST_StandardMotorSettings
+]]></Declaration>
+      <Get Name="Get" Id="{0bb4e6c2-a28d-42dd-8c00-72c60caa3991}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Settings := pSettings;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{37afc1aa-052f-4153-9325-d28035d66eb8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[pSettings := Settings;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Speed" Id="{6e17249c-bce2-4501-bc68-7b63d04479ab}">
+      <Declaration><![CDATA[(*Motor speed in 0.1 % *)
+PROPERTY Speed : UINT
+]]></Declaration>
+      <Get Name="Get" Id="{8717582b-ef6a-4316-9c87-57fa24e6ed29}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{4958965c-6b11-42a3-90f1-32e7fa4b6385}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+  </POU>
+</TcPlcObject>

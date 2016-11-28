@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="FB_CylinderOneValveSpringRetX_2" Id="{5bc90961-af6e-4b89-bb58-d69df15655e2}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+FUNCTION_BLOCK FB_CylinderOneValveSpringRetX_2 EXTENDS FB_Object IMPLEMENTS I_StandardCylinder
+///In / outputs
+VAR
+    DO_bValve AT %Q* : BOOL;
+    DI_bCylAtHome AT %I* : BOOL;
+    DI_bCylAtOut AT %I* : BOOL;
+END_VAR
+VAR
+    pSettings : POINTER TO ST_StandardCylinderSettings;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="AtHome" Id="{426c2552-2edd-4274-880d-a8b3105329d3}">
+      <Declaration><![CDATA[(*Cylinder at home position*)
+PROPERTY AtHome : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{c4ccd07f-3d61-461b-8c1f-9d5c8599c4e3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="AtOut" Id="{2c00745e-c610-468e-9877-0469a63f3388}">
+      <Declaration><![CDATA[(*Cylinder at out position*)
+PROPERTY AtOut : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{66abcc22-34a4-4454-8eca-3e8d7ba2d1b8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Control" Id="{d821537b-f4cd-4dc5-b2ab-4419795b0664}">
+      <Declaration><![CDATA[METHOD INTERNAL Control
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[{warning 'Add valve cyclic control implementation'}
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Enable" Id="{14e88f64-5e6a-43e5-932b-19f237a542f1}">
+      <Declaration><![CDATA[(*Enable cylinder to change position*)
+PROPERTY Enable : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{5ecaadc9-7f8d-474b-843a-3bb46077f56d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{86429450-a381-4441-a05f-45780571d606}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="FB_init" Id="{eb7bc73e-2323-43e8-a5ad-0948d80eeddf}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	(* if TRUE, the retain variables are initialized (warm start / cold start)*)
+	{attribute '''NORMAL__COMMENT' := ' if TRUE, the retain variables are initialized (warm start / cold start)'}
+	bInitRetains	: BOOL;
+	(* if TRUE, the instance afterwards gets moved into the copy code (online change)*)
+	{attribute '''NORMAL__COMMENT' := ' if TRUE, the instance afterwards gets moved into the copy code (online change)'}
+	bInCopyCode	: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[sName := 'FB_CylinderOneValveSpringRetX_2';
+sVersion := '1.0.0.0';
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Init" Id="{cc7b5fd8-11c4-4367-bdd9-cf36cc16fd81}">
+      <Declaration><![CDATA[///Initialize FB, Override to do custom initialize, no need to call super
+METHOD INTERNAL Init : HRESULT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Init := GVL_HResultSuccess.cHR_SuccesDone;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MoveHome" Id="{7fdb2267-2695-4df6-bc13-28c7e20fc240}">
+      <Declaration><![CDATA[METHOD MoveHome
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MoveOut" Id="{b6b2b84e-8fb1-4d33-95dd-97aa41fbbb64}">
+      <Declaration><![CDATA[METHOD MoveOut
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{69f7e285-8e38-4c22-a6be-fde7639a8bda}">
+      <Declaration><![CDATA[{attribute '''DOCU__COMMENT' := 'Reset error, allways call super'}
+(*Reset error, allways call super*)
+METHOD Reset
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.Reset();
+
+{warning 'Add reset implementation'}]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Settings" Id="{a5d43e09-ab30-478f-8f13-9d278ba4897d}">
+      <Declaration><![CDATA[(*Pointer to settings, should be set at FB_init but can be modified with set accessor if needed*)
+PROPERTY Settings : POINTER TO ST_StandardCylinderSettings
+]]></Declaration>
+      <Get Name="Get" Id="{5660aafd-971c-47f7-a5b0-e871238ed5d5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Settings := pSettings;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{0d4bb8df-5e98-4a68-9f06-47ae62c94f06}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[pSettings := Settings;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+  </POU>
+</TcPlcObject>

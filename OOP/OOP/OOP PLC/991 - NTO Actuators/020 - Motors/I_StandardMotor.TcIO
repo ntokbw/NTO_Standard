@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <Itf Name="I_StandardMotor" Id="{c80685e9-ce9b-4683-a0af-888a40dbe0c8}">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+///Standard motor
+INTERFACE I_StandardMotor EXTENDS I_Object
+]]></Declaration>
+    <Folder Name="Settings" Id="{f26fb7d2-34ab-42df-b20d-be760832e716}" />
+    <Property Name="Acc" Id="{aaee8ed9-22dc-4f60-812f-ee60316e8ba1}">
+      <Declaration><![CDATA[///Accelaration in FI dependent type
+PROPERTY Acc : UINT]]></Declaration>
+      <Get Name="Get" Id="{63c140a7-fc4d-4c67-a136-8d88382a7505}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{8b81c97f-54d6-42e2-b16e-24a8415e6670}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="CCW" Id="{8d72bd82-8ff5-483b-8cfa-c134cad34dcb}">
+      <Declaration><![CDATA[///Move motor CCW
+PROPERTY CCW : BOOL]]></Declaration>
+      <Get Name="Get" Id="{d2dda53d-70dc-441e-9868-29d19ff844a2}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{34a0bbd3-f865-413c-b677-c06918045ea7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="CW" Id="{100caab7-60b4-4be3-8c4a-31a315007bc7}">
+      <Declaration><![CDATA[///Move motor CW
+PROPERTY CW : BOOL]]></Declaration>
+      <Get Name="Get" Id="{08c3c034-5ea7-46ee-bf50-2f16f0671a1b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{718ba391-32df-4aba-b40f-6840ea9dff1d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="Dec" Id="{0ed26595-e6ca-4b99-ba5a-b2b778a818f6}">
+      <Declaration><![CDATA[///Deceleration in FI dependent type
+PROPERTY Dec : UINT]]></Declaration>
+      <Get Name="Get" Id="{d751d8a6-d9ad-4f5f-b35a-034d417b96db}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{2e1cc78f-756f-48b5-86c3-af68d7688bab}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="Enable" Id="{64214c29-6dfc-41d1-9de0-b0b89792c952}">
+      <Declaration><![CDATA[///Enable Motor
+PROPERTY Enable : BOOL]]></Declaration>
+      <Get Name="Get" Id="{487b4847-dbfa-4353-9ee2-9eec4e6981a6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{a067afd7-a885-435e-9f80-37d7837f53d5}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="LimitCCW" Id="{0fc42405-7106-454f-b1c1-3d4c2fafede4}">
+      <Declaration><![CDATA[///Limit counter-clockwise rotation
+PROPERTY LimitCCW : BOOL]]></Declaration>
+      <Get Name="Get" Id="{f0659a0e-75db-4015-8828-02b23ecc6e82}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{92f65689-a42f-4ae5-8aff-20ac800af311}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="LimitCW" Id="{9a63e3aa-9869-482d-9bf0-912320efc691}">
+      <Declaration><![CDATA[///Limit clockwise rotation
+PROPERTY LimitCW : BOOL]]></Declaration>
+      <Get Name="Get" Id="{b144c1c7-1985-44e2-bd56-21887061e9e9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{72340fec-a073-4105-baa4-5409dab86888}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="Settings" Id="{de0bea00-6c90-4466-a84a-0312dd41c133}" FolderPath="Settings\">
+      <Declaration><![CDATA[///Pointer to settings, should be set at FB_init but can be modified with set accessor if needed
+PROPERTY Settings : POINTER TO ST_StandardMotorSettings]]></Declaration>
+      <Get Name="Get" Id="{ce0ea0d0-e79d-47af-9bee-904f0bba5e68}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{1d962c30-10e9-4b07-a20e-38fe81a1342a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="Speed" Id="{57f534cb-ca15-42a2-9479-24b55d1d518d}">
+      <Declaration><![CDATA[///Motor speed in 0.1 % 
+PROPERTY Speed : UINT]]></Declaration>
+      <Get Name="Get" Id="{99d926ae-770a-465b-b58d-3cc84e688080}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{3834e235-73ce-4ff9-8667-3346fa9d38c5}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

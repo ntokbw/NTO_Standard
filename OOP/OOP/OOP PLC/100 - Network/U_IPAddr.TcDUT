@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="U_IPAddr" Id="{99ae0606-01c2-401c-bacf-a3cbe601c356}">
+    <Declaration><![CDATA[TYPE U_IPAddr :
+UNION
+	aIpAddr : ARRAY[0..3] OF BYTE;
+	nIpAddr : UDINT;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

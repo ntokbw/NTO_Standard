@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="FB_RcvDataBuffer" Id="{cc0b5c16-aa6e-474c-bead-53920f4237cd}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+FUNCTION_BLOCK FB_RcvDataBuffer IMPLEMENTS I_TcpRcv
+VAR
+	nRcvCnt : UDINT;
+	sNewData : STRING(1000);
+	nNewDataCnt : UDINT;
+	
+	nBufferPos : UDINT := 0;
+	nState : USINT;
+	
+	aRcvDataBuffer : ARRAY[0..cMaxData] OF BYTE;
+	aDataBuffer : ARRAY[0..cMaxData] OF BYTE;
+	
+	ipSubscriber : T_TcpRcv;
+	
+END_VAR
+VAR CONSTANT
+	cMaxData : UDINT := 1000;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{eb19e2fc-9e5f-4c30-9b42-5c8ba13cc8cf}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	ipSubscriber : T_TcpRcv;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^.ipSubscriber := ipSubscriber;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NewData" Id="{13459c52-7ea2-40b5-899b-d0e2028d53d6}">
+      <Declaration><![CDATA[METHOD NewData : HRESULT
+VAR_INPUT
+	nData	: UDINT;
+	pData	: PVOID;
+END_VAR
+VAR
+	bExit : BOOL;
+	nDataLength : UDINT;
+	nLoopNewData : UDINT;
+	nPosStart : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nData = 0 OR pData = 0 THEN
+	NewData := GVL_HResultError.cHR_ErrInvalidParameter;
+	RETURN;
+END_IF
+
+nRcvCnt := nRcvCnt + 1;
+nDataLength := MIN(nData, cMaxData);
+
+Tc2_System.MEMSET(destAddr := ADR(aRcvDataBuffer), fillByte := 0, n := SIZEOF(aRcvDataBuffer));
+Tc2_System.MEMCPY(destAddr := ADR(aRcvDataBuffer), srcAddr := pData, n := nDataLength); 
+
+bExit := FALSE;
+nPosStart := 0; 
+
+REPEAT
+	
+	CASE nState OF 
+		0 : //Waiting for STX	
+			FOR nLoopNewData := 0 TO nDataLength - 1 DO
+				IF aRcvDataBuffer[nLoopNewData] = 16#02 THEN
+					nPosStart := nLoopNewData;
+					nState := 1;
+					nBufferPos := 0;
+					EXIT;
+				END_IF
+			END_FOR
+			IF nState = 0 THEN
+				bExit := TRUE;
+			END_IF
+			
+		1 : //Check for ETX
+			FOR nLoopNewData := nPosStart TO nDataLength - 1 DO		
+		
+				aDataBuffer[nBufferPos] := aRcvDataBuffer[nLoopNewData];
+				nBufferPos := nBufferPos + 1;
+				
+				IF aRcvDataBuffer[nLoopNewData] = 16#03 THEN
+					nState := 2;
+					EXIT;
+				END_IF
+				
+			END_FOR
+			
+			IF nState = 1 THEN
+				bExit := TRUE;
+			END_IF
+			
+		2 : //Copy telegram to buffer and then full to newdata rcv
+			FOR nLoopNewData := 0 TO nBufferPos DO
+				sNewData[nLoopNewData] := aDataBuffer[nLoopNewData];
+			END_FOR
+			
+			sNewData[nBufferPos] := 0;
+			
+			IF ipSubscriber <> 0 THEN
+				ipSubscriber^.NewData(pData := ADR(sNewData), nData := nBufferPos);
+			END_IF
+			
+			nNewDataCnt := nNewDataCnt + 1;
+			
+			nBufferPos := 0;
+			nState := 0;
+			bExit := TRUE;
+			
+		ELSE
+			
+			nState := 0;
+			bExit := TRUE;
+		
+	END_CASE
+	
+UNTIL
+	bExit
+END_REPEAT
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

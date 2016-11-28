@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="ST_StandardMotorSettings" Id="{2dfbcf2e-e063-46b6-88af-64735980b671}">
+    <Declaration><![CDATA[///Standard motor settings
+TYPE ST_StandardMotorSettings :
+STRUCT
+    eEnableMode : E_MotorEnableMode; ///Enable mode
+    nMaxSpeed : UINT; //Max speed in 0.1%
+    nMaxAcc : UINT; //Max accelaration in FI dependent type
+    nMaxDec : UINT; //Max deceleration in FI dependent type
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="FB_CustomTcp" Id="{5957cace-372b-48d3-ae24-79666929e881}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+FUNCTION_BLOCK FB_CustomTcp EXTENDS FB_SimpleTcpClient
+VAR
+	nRcvCnt : UDINT;
+	sData : STRING(255);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{78fec908-3c2e-4b31-89e3-ec846b8660da}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+VAR
+	ipSrv : ITComObjectServer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[sName := 'FB_CustomTcp';
+sVersion := '1.0.0.0';]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

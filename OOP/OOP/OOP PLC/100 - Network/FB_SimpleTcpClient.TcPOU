@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="FB_SimpleTcpClient" Id="{53be05bf-b737-405c-aa2d-eb27b8674570}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+FUNCTION_BLOCK FB_SimpleTcpClient EXTENDS FB_Object IMPLEMENTS ITcIoTcpProtocolRecv, I_TcpClient
+VAR
+	{attribute 'TcInitSymbol'}
+	oid : OTCID;
+	{attribute 'hide'}
+	ipTcp : ITcIoTcpProtocol;
+	{attribute 'hide'}
+	nSocketID : UDINT;
+	{attribute 'hide'}	
+	nPort : UINT;
+	{attribute 'hide'}
+	uIP : U_IPAddr;
+	{attribute 'hide'}
+	fbDelayBeforeConnected : Tc2_Standard.TON;
+	{attribute 'hide'}
+	bSendData : BOOL;
+	
+END_VAR
+///Log
+VAR
+	aEventsLog : ARRAY[0..cMaxEventsLogEntries] OF ST_Log;
+	nEventsLogEntries : UINT := 0;
+	aRcvDataLog : ARRAY[0..cMaxDataLogEntries] OF STRING(cMaxDataLogEntryLength);
+	nRcvDataEntries : UINT;
+	{attribute 'hide'}
+	bEventLog : BOOL := TRUE;	
+	{attribute 'hide'}
+	bDataLog : BOOL := FALSE;	
+	{warning 'Implemented with POINTER TO, until Beckhoff comes with solution to why Interface call crashes app'}
+	{attribute 'hide'}
+	ipReciever : T_TcpRcv;//I_TcpRcv;
+END_VAR
+VAR CONSTANT
+	cMaxEventsLogEntries : UINT := 100;
+	cMaxDataLogEntries : UDINT := 25;
+	cMaxDataLogEntryLength : UDINT := 255;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Connect" Id="{356afb1f-799a-4e28-bb7c-128ef30b01f9}">
+      <Declaration><![CDATA[METHOD PUBLIC Connect : HRESULT
+VAR_INPUT
+	uIPAddr : U_IPAddr;
+	nPort : UINT;
+	ipRcvData : T_TcpRcv;//I_TcpRcv;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nSocketID <> 0 OR ipTcp = 0 THEN
+	Connect := GVL_HResultError.cHR_ErrGeneral;
+	RETURN;
+END_IF
+
+IF uIPAddr.nIpAddr = 0 OR nPort = 0 THEN
+	Connect := GVL_HResultError.cHR_ErrInvalidParameter;
+	RETURN;
+END_IF
+bSendData := 0;
+
+//Open socket
+IF Tc3_Module.SUCCEEDED(ipTcp.AllocSocket(ipRecv := THIS^, socketId := nSocketID)) THEN
+	
+	IF Tc3_Module.FAILED(ipTcp.Connect(socketId := nSocketID, ipRemoteAddress := uIPAddr.nIpAddr, tcpPort := nPort)) THEN
+		ipTcp.FreeSocket(nSocketID);
+		nSocketID := 0;
+		Connect := GVL_HResultError.cHR_ErrConnect;
+		fbDelayBeforeConnected.IN := FALSE;
+	ELSE
+		Connect := GVL_HResultSuccess.cHR_SuccesDone;
+		fbDelayBeforeConnected.IN := TRUE;
+		uIP := uIPAddr;
+		nPort := nPort;
+		ipReciever := ipRcvData;
+	END_IF 
+	
+ELSE
+	
+	nSocketID := 0;
+	Connect := GVL_HResultError.cHR_ErrAllocSocket;
+	fbDelayBeforeConnected.IN := FALSE;
+	
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{93a0b053-5ba2-4608-9abe-df6df901250c}">
+      <Declaration><![CDATA[METHOD INTERNAL Control
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ipTcp <> 0 THEN
+	ipTcp.CheckReceived();
+	fbDelayBeforeConnected();
+	fbDelayBeforeConnected.PT := T#10000MS;
+END_IF;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="DataLogging" Id="{6fb86284-3374-4dbc-94be-ebb5e3843211}">
+      <Declaration><![CDATA[PROPERTY DataLogging : BOOL]]></Declaration>
+      <Get Name="Get" Id="{dd9984fd-0e6b-4736-8e4d-04f2b2ad7dd3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DataLogging := bDataLog;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{5c7e3ace-6559-442b-b37c-78e8d7ef83c1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[bDataLog := DataLogging;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="Disconnect" Id="{32657691-82a7-4ca0-98ad-2438fea96477}">
+      <Declaration><![CDATA[METHOD PUBLIC Disconnect : HRESULT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nSocketID = 0 OR ipTcp = 0 THEN
+	Disconnect := GVL_HResultError.cHR_ErrGeneral;
+	RETURN;
+END_IF
+
+//Close socket
+IF Tc3_Module.SUCCEEDED(ipTcp.IsConnected(nSocketID)) THEN
+	ipTcp.Close(nSocketID);
+	ipTcp.CheckReceived();
+END_IF
+fbDelayBeforeConnected.IN := FALSE;
+ipTcp.FreeSocket(nSocketID);
+nSocketID := 0;
+
+uIP.nIpAddr := 0;
+nPort := 0;
+bSendData := 0;
+ipReciever := 0;
+
+Disconnect := GVL_HResultSuccess.cHR_SuccesDone;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="EventLogging" Id="{661f3b05-cf20-4700-a399-9d9e2dabf4af}">
+      <Declaration><![CDATA[PROPERTY EventLogging : BOOL]]></Declaration>
+      <Get Name="Get" Id="{edb263af-a443-480c-9b91-ddc4543f7085}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EventLogging := bEventLog;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{479a3717-d0b1-4134-8f14-7718b333e9b6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[bEventLog := EventLogging;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="FB_exit" Id="{f97adade-09aa-416f-9c56-73368c654300}">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ipTcp <> 0 THEN
+	IF nSocketID <> 0 THEN
+		IF Tc3_Module.SUCCEEDED(ipTcp.IsConnected(nSocketID)) THEN
+			ipTcp.Close(nSocketID);
+			ipTcp.CheckReceived();
+		END_IF
+		ipTcp.FreeSocket(nSocketID);
+		nSocketID := 0;
+	ELSE
+		FB_exit := TRUE;
+	END_IF
+ELSE
+	FB_exit := FALSE;	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{c9422e11-7931-4887-9fea-85a59ae45867}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+VAR
+	ipSrv : ITComObjectServer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[sName := 'FB_SimpleTcpClient';
+sVersion := '1.0.0.0';
+
+IF Tc3_Module.FW_ObjMgr_GetObjectServer(oidApp := _AppInfo.ObjId, pipSrv := ADR(ipSrv)) = Tc3_Module.S_OK THEN
+	
+	IF ipSrv.TcQueryObjectInterface(oid := oid, iid := IID_ITcIoTcpProtocol, ADR(ipTcp)) = Tc3_Module.S_OK THEN
+		FB_init := TRUE;
+	ELSE
+		FB_init := FALSE;
+	END_IF
+	ipSrv.TcRelease();
+	ipSrv := 0;
+ELSE
+	FB_init := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IpAddress" Id="{8b98fcda-1be0-44ac-81eb-216333f0206e}">
+      <Declaration><![CDATA[PROPERTY IpAddress : U_IPAddr]]></Declaration>
+      <Get Name="Get" Id="{8eab5e7e-e14d-4c5c-a265-a4c0dd595b9a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IpAddress := uIP;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="IsConnected" Id="{19210e00-c8a5-458b-a213-00fb34af85d2}">
+      <Declaration><![CDATA[PROPERTY IsConnected : BOOL]]></Declaration>
+      <Get Name="Get" Id="{406f1d37-1e61-4137-8907-d16d820c8c8e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF nSocketID <> 0 AND ipTcp <> 0 AND fbDelayBeforeConnected.Q THEN
+	IsConnected := Tc3_Module.SUCCEEDED(ipTcp.IsConnected(nSocketID));
+ELSE
+	IsConnected := FALSE;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Port" Id="{57526a06-43a9-4faf-9b38-67a0650d98cc}">
+      <Declaration><![CDATA[PROPERTY Port : UINT]]></Declaration>
+      <Get Name="Get" Id="{8b08afe5-42bd-4aa4-8341-175242e792da}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Port := nPort;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ReceiveData" Id="{28ca136a-777b-4017-ba3e-049b250dbb84}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD ReceiveData : HRESULT
+VAR_INPUT
+	socketId	: UDINT;
+	nData	: UDINT;
+	pData	: PVOID;
+END_VAR
+VAR
+	nRes : HRESULT;
+END_VAR
+
+	]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ReceiveData := Tc3_Module.S_OK;
+//Log data, if enabled
+IF bDataLog THEN
+	
+	Tc2_System.MEMCPY(ADR(aRcvDataLog[nRcvDataEntries]),pData,MIN(cMaxDataLogEntryLength,nData));
+	nRcvDataEntries := nRcvDataEntries + 1;
+	
+	IF nRcvDataEntries > cMaxDataLogEntries THEN
+		nRcvDataEntries := 0;
+	END_IF
+	
+END_IF
+
+//Notify listeners
+IF ipReciever <> 0 THEN 
+	{warning 'Implemented with POINTER TO, until Beckhoff comes with solution to why Interface call crashes app'}
+	ipReciever^.NewData(nData := nData, pData := pData);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReceiveEvent" Id="{d0556567-169a-4e05-ae87-0b1049135220}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD ReceiveEvent : HRESULT
+VAR_INPUT
+	socketId	: UDINT;
+	tcpEvent	: TCPIP_EVENT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ReceiveEvent := Tc3_Module.S_OK;
+IF bEventLog THEN
+	aEventsLog[nEventsLogEntries].eTcpEvent := tcpEvent;
+	aEventsLog[nEventsLogEntries].nSocketID := socketId;
+	nEventsLogEntries := nEventsLogEntries + 1;
+	IF nEventsLogEntries > cMaxEventsLogEntries THEN
+		nEventsLogEntries := 0;
+	END_IF
+END_IF
+
+CASE tcpEvent OF
+	TCPIP_EVENT.TCPIP_EVENT_CONN_CLOSED :
+		THIS^.Disconnect();
+	TCPIP_EVENT.TCPIP_EVENT_RESET :
+		THIS^.Disconnect();
+	TCPIP_EVENT.TCPIP_EVENT_DATA_SENT :
+		bSendData := FALSE;
+	TCPIP_EVENT.TCPIP_EVENT_CONN_ESTABLISHED :
+		fbDelayBeforeConnected.PT := T#0MS;
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SendData" Id="{8a76ef1c-f89d-4ebb-bd48-2c18b5d6fa0b}">
+      <Declaration><![CDATA[METHOD SendData : HRESULT
+VAR_INPUT
+	nData : UDINT;
+	pData : PVOID;
+END_VAR
+VAR
+	nSendData : UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF uIP.nIpAddr = 0 OR nPort = 0 THEN
+	SendData := GVL_HResultError.cHR_ErrInvalidParameter;
+	RETURN;
+END_IF
+
+IF NOT(THIS^.IsConnected) THEN
+	SendData := GVL_HResultError.cHR_ErrNotConnected;
+	RETURN;
+END_IF
+
+SendData := ipTcp.SendData(socketId := nSocketID, nData := nData, pData := pData, nSendData := nSendData);
+bSendData := 1;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="SendingData" Id="{71f99154-bc1b-4ea8-b7df-48c06c65cd91}">
+      <Declaration><![CDATA[PROPERTY SendingData : BOOL]]></Declaration>
+      <Get Name="Get" Id="{7dd0986e-eacf-4bd6-9206-efda0d92e47c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SendingData := bSendData;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="TcAddRef" Id="{cb921820-ea32-4677-ad7f-292a2957daa6}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD TcAddRef : UDINT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TcQueryInterface" Id="{b4b9de43-fd68-4f16-9e1b-e1c335b0cb7d}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD TcQueryInterface : HRESULT
+VAR_INPUT
+	iid	: REFERENCE TO IID;
+	pipItf	: POINTER TO PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TcRelease" Id="{e4c1eb3d-688d-4634-a1d0-1edc73552525}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD TcRelease : UDINT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

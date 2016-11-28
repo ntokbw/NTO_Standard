@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <Itf Name="I_StandardCylinder" Id="{d18b866f-0390-430e-9b9e-caee21315be4}">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+///Standard cylinder
+INTERFACE I_StandardCylinder EXTENDS I_Object
+]]></Declaration>
+    <Folder Name="Settings" Id="{8b07865b-2db7-4e1e-aace-a3fe3af82c1c}" />
+    <Property Name="AtHome" Id="{25d96ad8-4fa5-4096-879f-88b8c60bddcc}">
+      <Declaration><![CDATA[///Cylinder at home position
+PROPERTY AtHome : BOOL]]></Declaration>
+      <Get Name="Get" Id="{511eb874-2f63-4231-b605-17869733e443}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="AtOut" Id="{fadbb3b1-5440-45fe-a196-e2780bda1083}">
+      <Declaration><![CDATA[///Cylinder at out position
+PROPERTY AtOut : BOOL]]></Declaration>
+      <Get Name="Get" Id="{16dafb83-1e25-4c40-899e-33887945afd6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Enable" Id="{45e19fc6-373e-42b3-8802-a5d94e051cce}">
+      <Declaration><![CDATA[///Enable cylinder to change position
+PROPERTY Enable : BOOL]]></Declaration>
+      <Get Name="Get" Id="{e06bb2c9-1bca-46c2-ad0f-f41259df3160}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{c1e0ad01-c59c-4e35-b89d-121c06ea65fc}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Method Name="MoveHome" Id="{104230db-bc98-464b-85e4-52736146d9ab}">
+      <Declaration><![CDATA[METHOD MoveHome
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="MoveOut" Id="{f79ad045-0a6d-4a0f-9730-f5b646040f70}">
+      <Declaration><![CDATA[METHOD MoveOut
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Settings" Id="{2bd5fba4-139c-45c4-949d-2bddd597fc2b}" FolderPath="Settings\">
+      <Declaration><![CDATA[///Pointer to settings, should be set at FB_init but can be modified with set accessor if needed
+PROPERTY Settings : POINTER TO ST_StandardCylinderSettings]]></Declaration>
+      <Get Name="Get" Id="{00185921-0d47-46f2-985a-6b44282f4bd0}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{f9d2d5be-559c-4028-83ee-802b1f1565c8}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

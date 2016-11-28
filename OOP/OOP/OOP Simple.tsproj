@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4020.0">
+	<Project ProjectGUID="{21B44C75-A96C-4B24-A2B7-921092C3D13F}" ShowHideConfigurations="#x6">
+		<System>
+			<Tasks>
+				<Task Id="2" Priority="20" CycleTime="10000" AmsPort="350">
+					<Name>PlcTask</Name>
+				</Task>
+				<Task Id="3" Priority="30" CycleTime="2000000" AmsPort="351">
+					<Name>VISU_TASK</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project File="OOP PLC.xti"/>
+		</Plc>
+		<Io>
+			<Device File="Device 1 (RT-Ethernet Adapter).xti" Id="1"/>
+		</Io>
+	</Project>
+</TcSmProject>

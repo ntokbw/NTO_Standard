@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="FB_RcvData" Id="{f5ef3362-fb64-465c-8821-28a6b9717bba}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+FUNCTION_BLOCK FB_RcvData IMPLEMENTS I_TcpRcv
+VAR
+	nRcvCnt : UDINT;
+	sData : STRING(255);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="NewData" Id="{29abfcd7-4723-4d47-92fa-727c53f0cb71}">
+      <Declaration><![CDATA[METHOD NewData : HRESULT
+VAR_INPUT
+	nData	: UDINT;
+	pData	: PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF nData <> 0 AND pData <> 0 THEN
+	nRcvCnt := nRcvCnt + 1;
+	Tc2_System.MEMCPY(destAddr := ADR(sData),srcAddr := pData, n := MIN(255,nData));
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

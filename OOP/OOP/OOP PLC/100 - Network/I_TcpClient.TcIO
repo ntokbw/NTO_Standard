@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <Itf Name="I_TcpClient" Id="{fed227ee-37fb-4baf-8eb0-a09c9bcfe7d7}">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+INTERFACE I_TcpClient EXTENDS I_Object
+]]></Declaration>
+    <Method Name="Connect" Id="{bdd80919-855b-41e3-9c00-4bf4a65c35da}">
+      <Declaration><![CDATA[METHOD PUBLIC Connect : HRESULT
+VAR_INPUT
+	uIPAddr : U_IPAddr;
+	nPort : UINT;
+	{warning 'Implemented with POINTER TO, until Beckhoff comes with solution to why Interface call crashes app'}
+	ipRcvData : T_TcpRcv;//I_TcpRcv; 
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="DataLogging" Id="{086d7b4c-fb3d-48e4-a1fa-dda6ac0fedb0}">
+      <Declaration><![CDATA[PROPERTY DataLogging : BOOL]]></Declaration>
+      <Get Name="Get" Id="{fc22911f-706d-46de-9aba-97303a706d85}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{9bf8ed1a-a7e1-4b8a-973b-5fc8d2b664e4}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Method Name="Disconnect" Id="{0fe0e3d8-a3fb-4747-8f77-8ad6113c66cf}">
+      <Declaration><![CDATA[METHOD PUBLIC Disconnect : HRESULT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="EventLogging" Id="{3cf49d27-c89a-4a2c-84ed-cd9a2c692e64}">
+      <Declaration><![CDATA[PROPERTY EventLogging : BOOL]]></Declaration>
+      <Get Name="Get" Id="{1b34d6fe-2417-4b88-934a-094b4d8d02cb}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{418cb103-8f1b-4801-9cc1-fcc926a2568c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="IpAddress" Id="{22e2db33-f6b8-4787-a622-7ccb75609a8d}">
+      <Declaration><![CDATA[PROPERTY IpAddress : U_IPAddr]]></Declaration>
+      <Get Name="Get" Id="{b11bdb3b-16ec-4244-8e15-af19fa54481b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="IsConnected" Id="{0ba98493-4746-46a6-8e1e-321d209cca29}">
+      <Declaration><![CDATA[PROPERTY IsConnected : BOOL]]></Declaration>
+      <Get Name="Get" Id="{54943b7e-b608-4d23-991e-9afff4e3f02e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Port" Id="{839a072d-f1a2-4fc5-848d-986095f22fe6}">
+      <Declaration><![CDATA[PROPERTY Port : UINT]]></Declaration>
+      <Get Name="Get" Id="{f2a595f8-85f4-4a73-b728-5d6a0077ca0d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="SendData" Id="{8d758620-b132-4b37-93d1-2b41758979bf}">
+      <Declaration><![CDATA[METHOD SendData : HRESULT
+VAR_INPUT
+	nData : UDINT;
+	pData : PVOID;
+END_VAR]]></Declaration>
+    </Method>
+    <Property Name="SendingData" Id="{8f708805-668d-456c-9b85-f7224c41bbba}">
+      <Declaration><![CDATA[PROPERTY SendingData : BOOL]]></Declaration>
+      <Get Name="Get" Id="{0c46129a-ab64-41ad-a8a1-a1268ef99175}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

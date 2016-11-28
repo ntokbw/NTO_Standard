@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="FB_MachinePart02" Id="{36f93153-f5ea-4ae6-a397-caf11d9698d8}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+FUNCTION_BLOCK FB_MachinePart02 EXTENDS FB_Object
+VAR CONSTANT
+    cMaxObjects1 : INT := 3;
+END_VAR
+VAR
+    pSettings : POINTER TO ST_SettingMachinePart02;
+END_VAR
+VAR
+    fbCylinder1_OneValve : FB_CylinderOneValveSpringRetX_2;
+    fbCylinder1_TwoValve : FB_CylinderTwoValveRetX_3;
+	iCylinder1 : I_StandardCylinder;
+	
+    fbCylinder2_OneValve : FB_CylinderOneValveSpringRetX_2;
+    fbCylinder2_TwoValve : FB_CylinderTwoValveRetX_3;
+	iCylinder2 : I_StandardCylinder;    
+	
+	aObjects : ARRAY[0..cMaxObjects1] OF POINTER TO I_Object := [ADR(iCylinder1), ADR(iCylinder2)];
+	nLoop : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{9d354d9a-0e65-4ed2-a5ef-023b6f3846b8}">
+      <Declaration><![CDATA[METHOD INTERNAL Control
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[{warning 'Add machine part cyclic control implementation'}
+
+CASE pSettings^.nCylinder1Type OF
+    0: 
+        iCylinder1 := fbCylinder1_OneValve;
+    1:
+        iCylinder1 := fbCylinder1_TwoValve;
+    ELSE
+        iCylinder1 := fbCylinder1_OneValve;
+END_CASE
+CASE pSettings^.nCylinder2Type OF
+    0: 
+        iCylinder2 := fbCylinder2_OneValve;
+    1:
+        iCylinder2 := fbCylinder2_TwoValve;
+    ELSE
+        iCylinder2 := fbCylinder2_OneValve;
+END_CASE
+
+
+
+
+FOR nLoop := 0 TO cMaxObjects1 DO
+    IF aObjects[nLoop] <> 0 THEN
+		IF aObjects[nLoop]^ <> 0 THEN
+			aObjects[nLoop]^.CycleTask();
+		END_IF
+	END_IF
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{a80774bc-4efa-4b8d-b37a-2a8f306e3658}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	(* if TRUE, the retain variables are initialized (warm start / cold start)*)
+	{attribute '''NORMAL__COMMENT' := ' if TRUE, the retain variables are initialized (warm start / cold start)'}
+	bInitRetains	: BOOL;
+	(* if TRUE, the instance afterwards gets moved into the copy code (online change)*)
+	{attribute '''NORMAL__COMMENT' := ' if TRUE, the instance afterwards gets moved into the copy code (online change)'}
+	bInCopyCode	: BOOL;
+	(*Pointer to motor settings*)
+	{attribute '''NORMAL__COMMENT' := 'Pointer to motor settings'}
+	pSettings	: POINTER TO ST_SettingMachinePart02;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[sName := 'FB_MachinePart02';
+sVersion := '1.0.0.0';
+
+THIS^.pSettings := pSettings;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Init" Id="{2e1325a7-da8d-4334-a337-9a0b6408b340}">
+      <Declaration><![CDATA[///Initialize FB, Override to do custom initialize, no need to call super
+METHOD INTERNAL Init : HRESULT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[{warning 'Add machine part init implementation'}
+fbCylinder1_OneValve.Settings := ADR(pSettings^.stCylinder1Settings);
+fbCylinder1_TwoValve.Settings := ADR(pSettings^.stCylinder1Settings);
+                     
+fbCylinder2_OneValve.Settings := ADR(pSettings^.stCylinder2Settings);
+fbCylinder2_TwoValve.Settings := ADR(pSettings^.stCylinder2Settings);
+
+
+Init := GVL_HResultSuccess.cHR_SuccesDone;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{6d853420-7cd9-4ae5-a2ea-94d079ebee69}">
+      <Declaration><![CDATA[{attribute '''DOCU__COMMENT' := 'Reset error'}
+(*Reset error*)
+METHOD Reset
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.Reset();
+
+{warning 'Add reset implementation'}]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

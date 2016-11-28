@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="E_CylinderEnableMode" Id="{ea2163bb-63ef-4a8b-b8ed-bf47ad54ad0d}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+///Cylinder enable mode
+TYPE E_CylinderEnableMode :
+(
+    eCylEnaOff,         ///Enable does not affect cylinder
+	eCylEnaToHome,      ///When enable false, move cylinder to home
+    eCylEnaToOut,       ///When enable false, move cylinder to out
+    eCylEnaNoChanges    ///When enable false, cylinder keeps the position
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="E_MotorEnableMode" Id="{15f5c0b2-ec4a-417f-b8f7-17df33db6769}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+///Cylinder enable mode
+TYPE E_MotorEnableMode :
+(
+    eMotorEnaOff,       ///Enable does not affect motor
+    eMotorEnaAll,       ///When enable false, motor cannot move CW or CCW
+    eMotorEnaAllowCW,   ///When enable false, motor can onlu move CW
+    eMotorEnaAllowCCW   ///When enable false, motor can onlu move CCW   
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

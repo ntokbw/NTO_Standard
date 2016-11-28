@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="F_Busy" Id="{bb15b117-3bbc-4dce-a8e4-e5608e416082}" SpecialFunc="None">
+    <Declaration><![CDATA[///Checks if the returned HRESULT is success and busy
+FUNCTION F_Busy : BOOL
+VAR_INPUT
+    hr : HRESULT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_Busy := (hr = GVL_HResultSuccess.cHR_SuccesBusy);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

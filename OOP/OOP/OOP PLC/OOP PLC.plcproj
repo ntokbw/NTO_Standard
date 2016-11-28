@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <FileVersion>1.0.0.0</FileVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{49565bfb-7eb0-42c0-998b-8b920adc6300}</ProjectGuid>
+    <SubObjectsSortedByName>True</SubObjectsSortedByName>
+    <Name>OOP_PLC</Name>
+    <ProgramVersion>3.1.4020.10</ProgramVersion>
+    <Application>{6bff7eee-c794-4ee9-b3fa-181491545e85}</Application>
+    <TypeSystem>{03890009-ea8c-47bd-b2cd-d92aad3fbfb6}</TypeSystem>
+    <Implicit_Task_Info>{211d9f76-2135-4dc2-8111-0be6561ced23}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{bbd5a87b-a38f-45c9-9d00-81fa76a1764f}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{3750108b-ce59-4eb1-9c6a-078d4f9a04bd}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{da9f0ea5-8549-41b1-94f4-943d6ed4a36a}</LibraryReferences>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="000 - General\FB_RcvData.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="000 - General\FB_RcvDataBuffer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="000 - General\GVL_MachineSettings.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="000 - General\MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="000 - General\P_System.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="000 - General\visMain.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="010 - Machine Part 01\FB_MachinePart01.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="010 - Machine Part 01\ST_SettingMachinePart01.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="010 - Machine Part 01\visSettingMachPart1.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="020 - Machine Part 02\FB_MachinePart02.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="020 - Machine Part 02\ST_SettingMachinePart02.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="020 - Machine Part 02\visSettingMachPart2.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="100 - Network\FB_CustomTcp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\I_TcpClient.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\I_TcpRcv.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\SampleTcpClient.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\FB_SimpleTcpClient.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\SampleTcpServer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\SampleUdpEchoServer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\ST_Log.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\T_TcpRcv.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\U_IPAddr.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="100 - Network\U_Data.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\HResult\F_Busy.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\HResult\F_Code.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\HResult\F_Fail.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\HResult\F_Success.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\HResult\GVL_HResultError.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\HResult\GVL_HResultSuccess.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\Object\FB_Object.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\Object\GVL_ObjectSetup.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\Object\I_Object.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="990 - NTO Standard\Object\T_ErrorHistory.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\010 - Cylinders\CylinderCollection\FB_CylinderOneValveSpringRetX_2.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\010 - Cylinders\CylinderCollection\FB_CylinderTwoValveRetX_3.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\010 - Cylinders\CylinderCollection\txtCylinderTypes.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\010 - Cylinders\E_CylinderEnableMode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\010 - Cylinders\I_StandardCylinder.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\010 - Cylinders\ST_StandardCylinderSettings.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\010 - Cylinders\txtLstCylinderEnableMode.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\010 - Cylinders\visStandardCylinderSettings.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\020 - Motors\MotorCollection\FB_Motor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\020 - Motors\MotorCollection\FB_MotorInverterFITYPE.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\020 - Motors\E_MotorEnableMode.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\020 - Motors\I_StandardMotor.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\020 - Motors\MotorCollection\txtMotorTypes.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\020 - Motors\ST_StandardMotorSettings.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\020 - Motors\txtLstMotorEnableMode.TcTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="991 - NTO Actuators\020 - Motors\visStandardMotorSettings.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalTextList.TcGTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PlcTask.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Visualization Manager.TcVMO">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderReference Include="System_VisuElemMeter" />
+    <PlaceholderReference Include="System_VisuElems" />
+    <PlaceholderReference Include="System_VisuElemsSpecialControls" />
+    <PlaceholderReference Include="System_VisuElemsWinControls" />
+    <PlaceholderReference Include="System_VisuElemTextEditor" />
+    <PlaceholderReference Include="system_visuinputs" />
+    <PlaceholderReference Include="System_VisuNativeControl" />
+    <PlaceholderReference Include="Tc2_Standard">
+      <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Standard</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_System">
+      <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_Module">
+      <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Module</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="VisuDialogs">
+      <DefaultResolution>VisuDialogs, * (System)</DefaultResolution>
+      <Namespace>VisuDialogs</Namespace>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="990 - NTO Standard" />
+    <Folder Include="990 - NTO Standard\HResult" />
+    <Folder Include="990 - NTO Standard\Machine Communication" />
+    <Folder Include="990 - NTO Standard\String" />
+    <Folder Include="990 - NTO Standard\Object" />
+    <Folder Include="991 - NTO Actuators" />
+    <Folder Include="991 - NTO Actuators\010 - Cylinders" />
+    <Folder Include="991 - NTO Actuators\010 - Cylinders\CylinderCollection" />
+    <Folder Include="991 - NTO Actuators\020 - Motors" />
+    <Folder Include="010 - Machine Part 01" />
+    <Folder Include="991 - NTO Actuators\020 - Motors\MotorCollection" />
+    <Folder Include="020 - Machine Part 02" />
+    <Folder Include="000 - General" />
+    <Folder Include="100 - Network" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OOP PLC.tmc">
+      <SubType>Content</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="Tc3_System_DK,3.3.1.8,Beckhoff - DK">
+      <Namespace>Tc3_System_DK</Namespace>
+    </LibraryReference>
+  </ItemGroup>
+  <ProjectExtensions>
+    <PlcProjectOptions>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
+      <v n="Name">"&lt;ProjectRoot&gt;"</v>
+      <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+        <v>{246001F4-279D-43AC-B241-948EB31120E1}</v>
+        <o>
+          <v n="Name">"{246001F4-279D-43AC-B241-948EB31120E1}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="String">
+            <v>SymbolLibraryConfiguration</v>
+            <v>VisuSymbols (System);True
+</v>
+          </d>
+        </o>
+        <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
+        <o>
+          <v n="Name">"{40450F57-0AA3-4216-96F3-5444ECB29763}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="String">
+            <v>ActiveVisuProfile</v>
+            <v>IR0whWr8bwe6BwAAhwvSTgAAAABQAgAAfv8FQwAAAAABAAAAAAAAAAEaUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwACTHsAZgA5ADUAYgBiADQAMgA2AC0ANQA1ADIANAAtADQAYgA0ADUALQA5ADQAMAAwAC0AZgBiADAAZgAyAGUANwA3AGUANQAxAGIAfQADCE4AYQBtAGUABCxUAHcAaQBuAEMAQQBUACAAMwAuADEAIABCAHUAaQBsAGQAIAA0ADAAMgAwAAUWUAByAG8AZgBpAGwAZQBEAGEAdABhAAZMewAxADYAZQA1ADUAYgA2ADAALQA3ADAANAAzAC0ANABhADYAMwAtAGIANgA1AGIALQA2ADEANAA3ADEAMwA4ADcAOABkADQAMgB9AAcSTABpAGIAcgBhAHIAaQBlAHMACEx7ADMAYgBmAGQANQA0ADUAOQAtAGIAMAA3AGYALQA0AGQANgBlAC0AYQBlADEAYQAtAGEAOAAzADMANQA2AGEANQA1ADEANAAyAH0ACUx7ADkAYwA5ADUAOAA5ADYAOAAtADIAYwA4ADUALQA0ADEAYgBiAC0AOAA4ADcAMQAtADgAOQA1AGYAZgAxAGYAZQBkAGUAMQBhAH0ACg5WAGUAcgBzAGkAbwBuAAsGaQBuAHQADApVAHMAYQBnAGUADQpUAGkAdABsAGUADhpWAGkAcwB1AEUAbABlAG0ATQBlAHQAZQByAA8OQwBvAG0AcABhAG4AeQAQDFMAeQBzAHQAZQBtABESVgBpAHMAdQBFAGwAZQBtAHMAEjBWAGkAcwB1AEUAbABlAG0AcwBTAHAAZQBjAGkAYQBsAEMAbwBuAHQAcgBvAGwAcwATKFYAaQBzAHUARQBsAGUAbQBzAFcAaQBuAEMAbwBuAHQAcgBvAGwAcwAUJFYAaQBzAHUARQBsAGUAbQBUAGUAeAB0AEUAZABpAHQAbwByABUiVgBpAHMAdQBOAGEAdABpAHYAZQBDAG8AbgB0AHIAbwBsABYUdgBpAHMAdQBpAG4AcAB1AHQAcwAXDHMAeQBzAHQAZQBtABgYVgBpAHMAdQBFAGwAZQBtAEIAYQBzAGUAGSZEAGUAdgBQAGwAYQBjAGUAaABvAGwAZABlAHIAcwBVAHMAZQBkABoIYgBvAG8AbAAbIlAAbAB1AGcAaQBuAEMAbwBuAHMAdAByAGEAaQBuAHQAcwAcTHsANAAzAGQANQAyAGIAYwBlAC0AOQA0ADIAYwAtADQANABkADcALQA5AGUAOQA0AC0AMQBiAGYAZABmADMAMQAwAGUANgAzAGMAfQAdHEEAdABMAGUAYQBzAHQAVgBlAHIAcwBpAG8AbgAeFFAAbAB1AGcAaQBuAEcAdQBpAGQAHxZTAHkAcwB0AGUAbQAuAEcAdQBpAGQAIEhhAGYAYwBkADUANAA0ADYALQA0ADkAMQA0AC0ANABmAGUANwAtAGIAYgA3ADgALQA5AGIAZgBmAGUAYgA3ADAAZgBkADEANwAhFFUAcABkAGEAdABlAEkAbgBmAG8AIkx7AGIAMAAzADMANgA2AGEAOAAtAGIANQBjADAALQA0AGIAOQBhAC0AYQAwADAAZQAtAGUAYgA4ADYAMAAxADEAMQAwADQAYwAzAH0AIw5VAHAAZABhAHQAZQBzACRMewAxADgANgA4AGYAZgBjADkALQBlADQAZgBjAC0ANAA1ADMAMgAtAGEAYwAwADYALQAxAGUAMwA5AGIAYgA1ADUANwBiADYAOQB9ACVMewBhADUAYgBkADQAOABjADMALQAwAGQAMQA3AC0ANAAxAGIANQAtAGIAMQA2ADQALQA1AGYAYwA2AGEAZAAyAGIAOQA2AGIANwB9ACYWTwBiAGoAZQBjAHQAcwBUAHkAcABlACdUVQBwAGQAYQB0AGUATABhAG4AZwB1AGEAZwBlAE0AbwBkAGUAbABGAG8AcgBDAG8AbgB2AGUAcgB0AGkAYgBsAGUATABpAGIAcgBhAHIAaQBlAHMAKBBMAGkAYgBUAGkAdABsAGUAKRRMAGkAYgBDAG8AbQBwAGEAbgB5ACoeVQBwAGQAYQB0AGUAUAByAG8AdgBpAGQAZQByAHMAKzhTAHkAcwB0AGUAbQAuAEMAbwBsAGwAZQBjAHQAaQBvAG4AcwAuAEgAYQBzAGgAdABhAGIAbABlACwSdgBpAHMAdQBlAGwAZQBtAHMALUg2AGMAYgAxAGMAZABlADEALQBkADUAZABjAC0ANABhADMAYgAtADkAMAA1ADQALQAyADEAZgBhADcANQA2AGEAMwBmAGEANAAuKEkAbgB0AGUAcgBmAGEAYwBlAFYAZQByAHMAaQBvAG4ASQBuAGYAbwAvTHsAYwA2ADEAMQBlADQAMAAwAC0ANwBmAGIAOQAtADQAYwAzADUALQBiADkAYQBjAC0ANABlADMAMQA0AGIANQA5ADkANgA0ADMAfQAwGE0AYQBqAG8AcgBWAGUAcgBzAGkAbwBuADEYTQBpAG4AbwByAFYAZQByAHMAaQBvAG4AMgxMAGUAZwBhAGMAeQAzMEwAYQBuAGcAdQBhAGcAZQBNAG8AZABlAGwAVgBlAHIAcwBpAG8AbgBJAG4AZgBvADQaQwBvAG0AcABhAHQAaQBiAGkAbABpAHQAeQDQAAIaA9ADAS0E0AUGGgbQBwgaAUUHCQjQAAkaBEUKCwQDAAAABQAAAAgAAAAAAAAA0AwLrQIAAADQDQEtDtAPAS0Q0AAJGgRFCgsEAwAAAAUAAAAIAAAAAAAAANAMC60BAAAA0A0BLRHQDwEtENAACRoERQoLBAMAAAAFAAAACAAAAAAAAADQDAutAgAAANANAS0S0A8BLRDQAAkaBEUKCwQDAAAABQAAAAgAAAAAAAAA0AwLrQIAAADQDQEtE9APAS0Q0AAJGgRFCgsEAwAAAAUAAAAIAAAAAAAAANAMC60CAAAA0A0BLRTQDwEtENAACRoERQoLBAMAAAAFAAAACAAAAAAAAADQDAutAgAAANANAS0V0A8BLRDQAAkaBEUKCwQDAAAABQAAAAgAAAAAAAAA0AwLrQIAAADQDQEtFtAPAS0X0AAJGgRFCgsEAwAAAAUAAAAIAAAAAAAAANAMC60EAAAA0A0BLRjQDwEtENAZGq0BRRscAdAAHBoCRR0LBAMAAAAFAAAACAAAAAAAAADQHh8tINAhIhoCRSMkAtAAJRoFRQoLBAMAAAADAAAAAAAAAAoAAADQJgutAAAAANADAS0n0CgBLRHQKQEtENAAJRoFRQoLBAMAAAADAAAAAAAAAAoAAADQJgutAQAAANADAS0n0CgBLRHQKQEtEJoqKwFFAAEC0AABLSzQAAEtF9AAHy0t0C4vGgPQMAutAQAAANAxC60RAAAA0DIarQDQMy8aA9AwC60CAAAA0DELrQMAAADQMhqtANA0Gq0A</v>
+          </d>
+        </o>
+        <v>{29BD8D0C-3586-4548-BB48-497B9A01693F}</v>
+        <o>
+          <v n="Name">"{29BD8D0C-3586-4548-BB48-497B9A01693F}"</v>
+          <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+            <v>Rules</v>
+            <o>
+              <v n="Name">"Rules"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
+          </d>
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
+        <o>
+          <v n="Name">"{8F99A816-E488-41E4-9FA3-846536012284}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+        <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
+        <o>
+          <v n="Name">"{192FAD59-8248-4824-A8DE-9177C94C195A}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" />
+        </o>
+      </d>
+      <d n="Values" t="Hashtable" />
+    </o>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
+    </PlcProjectOptions>
+  </ProjectExtensions>
+</Project>

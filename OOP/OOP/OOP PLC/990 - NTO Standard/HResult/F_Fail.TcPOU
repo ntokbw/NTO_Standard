@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="F_Fail" Id="{8ce76036-fc0e-4632-93a1-4d7fa7219091}" SpecialFunc="None">
+    <Declaration><![CDATA[///Checks if the HRESULT is error
+FUNCTION F_Fail : BOOL
+VAR_INPUT
+    hr : HRESULT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F_Fail := (hr < 0);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

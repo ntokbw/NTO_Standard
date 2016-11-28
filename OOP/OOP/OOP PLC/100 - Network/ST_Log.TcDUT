@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="ST_Log" Id="{5ac61d76-21e4-4a9e-9491-43924f077186}">
+    <Declaration><![CDATA[TYPE ST_Log :
+STRUCT
+	nSocketID : UDINT;
+	eTcpEvent : TCPIP_EVENT;
+	sMessage : STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

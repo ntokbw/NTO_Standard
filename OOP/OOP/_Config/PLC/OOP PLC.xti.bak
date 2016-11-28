@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmItem" TcSmVersion="1.0" TcVersion="3.1.4020.0" ClassName="CNestedPlcProjDef">
+	<DataTypes>
+		<DataType>
+			<Name GUID="{1E8C4019-B465-4C5A-8800-6FE7E86BD115}" AutoDeleteType="true">E_MotorEnableMode</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<EnumInfo>
+				<Text>
+					<![CDATA[eMotorEnaOff]]>
+				</Text>
+				<Enum>0</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text>
+					<![CDATA[eMotorEnaAll]]>
+				</Text>
+				<Enum>1</Enum>
+				<Comment>
+					<![CDATA[Enable does not affect motor]]>
+				</Comment>
+			</EnumInfo>
+			<EnumInfo>
+				<Text>
+					<![CDATA[eMotorEnaAllowCW]]>
+				</Text>
+				<Enum>2</Enum>
+				<Comment>
+					<![CDATA[When enable false, motor cannot move CW or CCW]]>
+				</Comment>
+			</EnumInfo>
+			<EnumInfo>
+				<Text>
+					<![CDATA[eMotorEnaAllowCCW]]>
+				</Text>
+				<Enum>3</Enum>
+				<Comment>
+					<![CDATA[When enable false, motor can onlu move CW
+When enable false, motor can onlu move CCW   ]]>
+				</Comment>
+			</EnumInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{3A138655-A7BF-49E0-B6DA-C59A739B3F08}" AutoDeleteType="true">ST_StandardMotorSettings</Name>
+			<BitSize>64</BitSize>
+			<SubItem>
+				<Name>eEnableMode</Name>
+				<Type GUID="{1E8C4019-B465-4C5A-8800-6FE7E86BD115}">E_MotorEnableMode</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nMaxSpeed</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<Comment>
+					<![CDATA[Enable mode]]>
+				</Comment>
+				<BitSize>16</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nMaxAcc</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<Comment>
+					<![CDATA[Max accelaration in FI dependent type]]>
+				</Comment>
+				<BitSize>16</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nMaxDec</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000005}">UINT</Type>
+				<Comment>
+					<![CDATA[Max deceleration in FI dependent type]]>
+				</Comment>
+				<BitSize>16</BitSize>
+				<BitOffs>48</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{C574856F-1970-490E-BC0B-8872F6F42B3E}" AutoDeleteType="true">E_CylinderEnableMode</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<EnumInfo>
+				<Text>
+					<![CDATA[eCylEnaOff]]>
+				</Text>
+				<Enum>0</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text>
+					<![CDATA[eCylEnaToHome]]>
+				</Text>
+				<Enum>1</Enum>
+				<Comment>
+					<![CDATA[Enable does not affect cylinder]]>
+				</Comment>
+			</EnumInfo>
+			<EnumInfo>
+				<Text>
+					<![CDATA[eCylEnaToOut]]>
+				</Text>
+				<Enum>2</Enum>
+				<Comment>
+					<![CDATA[When enable false, move cylinder to home]]>
+				</Comment>
+			</EnumInfo>
+			<EnumInfo>
+				<Text>
+					<![CDATA[eCylEnaNoChanges]]>
+				</Text>
+				<Enum>3</Enum>
+				<Comment>
+					<![CDATA[When enable false, move cylinder to out
+When enable false, cylinder keeps the position]]>
+				</Comment>
+			</EnumInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{86BD795B-9D6F-42B9-933A-BA95D742FC68}" AutoDeleteType="true">ST_StandardCylinderSettings</Name>
+			<BitSize>160</BitSize>
+			<SubItem>
+				<Name>bSensorAtOut</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>tTimeToOrAtOut</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000048}">TIME</Type>
+				<Comment>
+					<![CDATA[Cylinder has sensor at out]]>
+				</Comment>
+				<BitSize>32</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>bSensorAtHome</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<Comment>
+					<![CDATA[Cylinder at or to out, bSensorOut = true: at out, bSensorOut = false: to out ]]>
+				</Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>64</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>tTimeToOrAtHome</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000048}">TIME</Type>
+				<Comment>
+					<![CDATA[Cylinder has sensor at home]]>
+				</Comment>
+				<BitSize>32</BitSize>
+				<BitOffs>96</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>eEnableMode</Name>
+				<Type GUID="{C574856F-1970-490E-BC0B-8872F6F42B3E}">E_CylinderEnableMode</Type>
+				<Comment>
+					<![CDATA[Cylinder at or to home, bSensorOut = true: at home, bSensorOut = false: to home]]>
+				</Comment>
+				<BitSize>16</BitSize>
+				<BitOffs>128</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{4BB21D2B-BC68-4B50-A531-65150C1C257B}" AutoDeleteType="true">ST_SettingMachinePart01</Name>
+			<BitSize>256</BitSize>
+			<SubItem>
+				<Name>nMotorType</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment>
+					<![CDATA[Motor type]]>
+				</Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>stMotorSettings</Name>
+				<Type GUID="{3A138655-A7BF-49E0-B6DA-C59A739B3F08}">ST_StandardMotorSettings</Type>
+				<BitSize>64</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nCylinderType</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment>
+					<![CDATA[Cylinder type]]>
+				</Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>80</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>stCylinderSettings</Name>
+				<Type GUID="{86BD795B-9D6F-42B9-933A-BA95D742FC68}">ST_StandardCylinderSettings</Type>
+				<BitSize>160</BitSize>
+				<BitOffs>96</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{10419F4E-38E9-4FAE-886F-C00C4DB84815}" AutoDeleteType="true">ST_SettingMachinePart02</Name>
+			<BitSize>384</BitSize>
+			<SubItem>
+				<Name>nCylinder1Type</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment>
+					<![CDATA[Cylinder type]]>
+				</Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>stCylinder1Settings</Name>
+				<Type GUID="{86BD795B-9D6F-42B9-933A-BA95D742FC68}">ST_StandardCylinderSettings</Type>
+				<BitSize>160</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>nCylinder2Type</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment>
+					<![CDATA[Cylinder type]]>
+				</Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>192</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>stCylinder2Settings</Name>
+				<Type GUID="{86BD795B-9D6F-42B9-933A-BA95D742FC68}">ST_StandardCylinderSettings</Type>
+				<BitSize>160</BitSize>
+				<BitOffs>224</BitOffs>
+			</SubItem>
+		</DataType>
+	</DataTypes>
+	<Project GUID="{49565BFB-7EB0-42C0-998B-8B920ADC6300}" Name="OOP PLC" PrjFilePath="..\..\OOP PLC\OOP PLC.plcproj" TmcFilePath="..\..\OOP PLC\OOP PLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
+		<Instance Id="#x01010010" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+			<Name>OOP PLC Instance</Name>
+			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+			<Vars VarGrpType="2">
+				<Name>PlcTask Outputs</Name>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbCylinder1_OneValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbCylinder1_TwoValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_Motor.DO_bCW</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_Motor.DO_bCCW</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_FI.DO_nControlWord</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_FI.DO_nSpeed</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_FI.DO_nRamp</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbCylinder1_OneValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbCylinder1_TwoValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_Motor.DO_bCW</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_Motor.DO_bCCW</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_FI.DO_nControlWord</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_FI.DO_nSpeed</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_FI.DO_nRamp</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder1_OneValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder1_TwoValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder2_OneValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder2_TwoValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder1_OneValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder1_TwoValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder2_OneValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder2_TwoValve.DO_bValve</Name>
+					<Type>BOOL</Type>
+				</Var>
+			</Vars>
+			<Vars VarGrpType="8">
+				<Name>PlcTask Retains</Name>
+				<Var>
+					<Name>GVL_MachineSettings.stSettingsMach01_1</Name>
+					<Type GUID="{4BB21D2B-BC68-4B50-A531-65150C1C257B}">ST_SettingMachinePart01</Type>
+					<InOut>7</InOut>
+					<SubVar>
+						<Name>nMotorType</Name>
+						<Comment>
+							<![CDATA[Motor type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stMotorSettings^nMaxSpeed</Name>
+						<Comment>
+							<![CDATA[Enable mode]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stMotorSettings^nMaxAcc</Name>
+						<Comment>
+							<![CDATA[Max accelaration in FI dependent type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stMotorSettings^nMaxDec</Name>
+						<Comment>
+							<![CDATA[Max deceleration in FI dependent type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>nCylinderType</Name>
+						<Comment>
+							<![CDATA[Cylinder type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinderSettings^tTimeToOrAtOut</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at out]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinderSettings^bSensorAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to out, bSensorOut = true: at out, bSensorOut = false: to out ]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinderSettings^tTimeToOrAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at home]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinderSettings^eEnableMode</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to home, bSensorOut = true: at home, bSensorOut = false: to home]]>
+						</Comment>
+					</SubVar>
+				</Var>
+				<Var>
+					<Name>GVL_MachineSettings.stSettingsMach01_2</Name>
+					<Type GUID="{4BB21D2B-BC68-4B50-A531-65150C1C257B}">ST_SettingMachinePart01</Type>
+					<InOut>7</InOut>
+					<SubVar>
+						<Name>nMotorType</Name>
+						<Comment>
+							<![CDATA[Motor type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stMotorSettings^nMaxSpeed</Name>
+						<Comment>
+							<![CDATA[Enable mode]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stMotorSettings^nMaxAcc</Name>
+						<Comment>
+							<![CDATA[Max accelaration in FI dependent type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stMotorSettings^nMaxDec</Name>
+						<Comment>
+							<![CDATA[Max deceleration in FI dependent type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>nCylinderType</Name>
+						<Comment>
+							<![CDATA[Cylinder type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinderSettings^tTimeToOrAtOut</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at out]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinderSettings^bSensorAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to out, bSensorOut = true: at out, bSensorOut = false: to out ]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinderSettings^tTimeToOrAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at home]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinderSettings^eEnableMode</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to home, bSensorOut = true: at home, bSensorOut = false: to home]]>
+						</Comment>
+					</SubVar>
+				</Var>
+				<Var>
+					<Name>GVL_MachineSettings.stSettingsMach02_1</Name>
+					<Type GUID="{10419F4E-38E9-4FAE-886F-C00C4DB84815}">ST_SettingMachinePart02</Type>
+					<InOut>7</InOut>
+					<SubVar>
+						<Name>nCylinder1Type</Name>
+						<Comment>
+							<![CDATA[Cylinder type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder1Settings^tTimeToOrAtOut</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at out]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder1Settings^bSensorAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to out, bSensorOut = true: at out, bSensorOut = false: to out ]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder1Settings^tTimeToOrAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at home]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder1Settings^eEnableMode</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to home, bSensorOut = true: at home, bSensorOut = false: to home]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>nCylinder2Type</Name>
+						<Comment>
+							<![CDATA[Cylinder type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder2Settings^tTimeToOrAtOut</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at out]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder2Settings^bSensorAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to out, bSensorOut = true: at out, bSensorOut = false: to out ]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder2Settings^tTimeToOrAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at home]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder2Settings^eEnableMode</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to home, bSensorOut = true: at home, bSensorOut = false: to home]]>
+						</Comment>
+					</SubVar>
+				</Var>
+				<Var>
+					<Name>GVL_MachineSettings.stSettingsMach02_2</Name>
+					<Type GUID="{10419F4E-38E9-4FAE-886F-C00C4DB84815}">ST_SettingMachinePart02</Type>
+					<InOut>7</InOut>
+					<SubVar>
+						<Name>nCylinder1Type</Name>
+						<Comment>
+							<![CDATA[Cylinder type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder1Settings^tTimeToOrAtOut</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at out]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder1Settings^bSensorAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to out, bSensorOut = true: at out, bSensorOut = false: to out ]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder1Settings^tTimeToOrAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at home]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder1Settings^eEnableMode</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to home, bSensorOut = true: at home, bSensorOut = false: to home]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>nCylinder2Type</Name>
+						<Comment>
+							<![CDATA[Cylinder type]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder2Settings^tTimeToOrAtOut</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at out]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder2Settings^bSensorAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to out, bSensorOut = true: at out, bSensorOut = false: to out ]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder2Settings^tTimeToOrAtHome</Name>
+						<Comment>
+							<![CDATA[Cylinder has sensor at home]]>
+						</Comment>
+					</SubVar>
+					<SubVar>
+						<Name>stCylinder2Settings^eEnableMode</Name>
+						<Comment>
+							<![CDATA[Cylinder at or to home, bSensorOut = true: at home, bSensorOut = false: to home]]>
+						</Comment>
+					</SubVar>
+				</Var>
+			</Vars>
+			<Vars VarGrpType="1">
+				<Name>VISU_TASK Inputs</Name>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbCylinder1_OneValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbCylinder1_OneValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbCylinder1_TwoValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbCylinder1_TwoValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_Motor.DI_bMotorOk</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_FI.DI_nStatusWord</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_FI.DI_nActSpeed</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_1.fbMotor1_FI.DI_nCurrent</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbCylinder1_OneValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbCylinder1_OneValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbCylinder1_TwoValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbCylinder1_TwoValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_Motor.DI_bMotorOk</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_FI.DI_nStatusWord</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_FI.DI_nActSpeed</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach01_2.fbMotor1_FI.DI_nCurrent</Name>
+					<Type>WORD</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder1_OneValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder1_OneValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder1_TwoValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder1_TwoValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder2_OneValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder2_OneValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder2_TwoValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_1.fbCylinder2_TwoValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder1_OneValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder1_OneValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder1_TwoValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder1_TwoValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder2_OneValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder2_OneValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder2_TwoValve.DI_bCylAtHome</Name>
+					<Type>BOOL</Type>
+				</Var>
+				<Var>
+					<Name>MAIN.fbMach02_2.fbCylinder2_TwoValve.DI_bCylAtOut</Name>
+					<Type>BOOL</Type>
+				</Var>
+			</Vars>
+			<TaskPouOids>
+				<TaskPouOid Prio="30" OTCID="#x01010012"/>
+				<TaskPouOid Prio="20" OTCID="#x01010011"/>
+			</TaskPouOids>
+		</Instance>
+	</Project>
+</TcSmItem>

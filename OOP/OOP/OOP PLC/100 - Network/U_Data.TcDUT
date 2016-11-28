@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="U_Data" Id="{61532652-25bb-441d-ab1c-8fec28a197c0}">
+    <Declaration><![CDATA[TYPE U_Data :
+UNION
+	sData : STRING(255);
+	aData : ARRAY[0..255] OF BYTE;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

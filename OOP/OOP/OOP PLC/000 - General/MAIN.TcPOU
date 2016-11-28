@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="MAIN" Id="{d35766d1-5497-4d84-b6ee-a4e0fe7fef38}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+//Beckhoff.dk, System_DK 
+VAR
+	bReset: BOOL;
+	bWrite: BOOL;
+END_VAR
+VAR
+	fbTcpClient : FB_SimpleTcpClient;
+	bLogON : BOOL;
+	bConnect : BOOL;
+	bDisconnect : BOOL;
+	bSendData :BOOL;	
+	nResConnect : HRESULT;
+	nResDisconnect : HRESULT;
+	nResSendData : HRESULT;
+	bIsConnected : BOOL;
+	bSendingData : BOOL;
+	uIP : U_IPAddr := (aIpAddr := [14,1,168,192]);
+	sData : U_Data;
+	nCnt : UDINT;
+	
+END_VAR
+
+VAR
+	fbRcvData2 : FB_RcvData;
+	fbRcvData : FB_RcvDataBuffer(ipSubscriber := ADR(fbRcvData2));
+END_VAR
+
+(*
+VAR CONSTANT
+    cMaxObjects1 : INT := 3;
+END_VAR
+VAR
+    fbMach01_1 : FB_MachinePart01(pSettings := ADR(GVL_MachineSettings.stSettingsMach01_1));   
+    fbMach01_2 : FB_MachinePart01(pSettings := ADR(GVL_MachineSettings.stSettingsMach01_2));
+    fbMach02_1 : FB_MachinePart02(pSettings := ADR(GVL_MachineSettings.stSettingsMach02_1));
+    fbMach02_2 : FB_MachinePart02(pSettings := ADR(GVL_MachineSettings.stSettingsMach02_2));
+END_VAR
+VAR
+    nLoop : INT;
+    aObjects : ARRAY[0..cMaxObjects1] OF I_Object := [fbMach01_1,fbMach01_2,fbMach02_1,fbMach02_2];
+END_VAR
+*)]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Beckhoff.dk standard system
+P_System(bWritePersistent:= bWrite, bReset:= bReset); 
+
+fbTcpClient.CycleTask();
+fbTcpClient.DataLogging := bLogON;
+
+IF bConnect THEN
+	nResConnect := fbTcpClient.Connect(uIPAddr := uIP, nPort := 9990, ipRcvData :=  ADR(fbRcvData));
+	bConnect := FALSE;
+END_IF
+
+IF bDisconnect THEN
+	nResDisconnect := fbTcpClient.Disconnect();
+	bDisconnect := FALSE;
+END_IF
+
+bIsConnected := fbTcpClient.IsConnected;
+bSendingData := fbTcpClient.SendingData;
+
+
+IF bIsConnected AND bSendData AND NOT(bSendingData) THEN
+	sData.sData := Tc2_Standard.CONCAT('Cnt: ', Tc2_Standard.CONCAT(UDINT_TO_STRING(nCnt),'$n$r'));
+	nCnt := nCnt + 1;
+	fbTcpClient.SendData(pData := ADR(sData), nData := INT_TO_UDINT(Tc2_Standard.LEN(sData.sData)));
+	sData.sData := Tc2_Standard.CONCAT('Cnt: ', Tc2_Standard.CONCAT(UDINT_TO_STRING(nCnt),'$n$r'));
+	nCnt := nCnt + 1;
+	fbTcpClient.SendData(pData := ADR(sData), nData := INT_TO_UDINT(Tc2_Standard.LEN(sData.sData)));
+END_IF
+
+
+
+(*
+FOR nLoop := 0 TO cMaxObjects1 DO
+    IF aObjects[nLoop] <> 0 THEN
+        aObjects[nLoop].CycleTask();
+	END_IF
+END_FOR
+*)
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

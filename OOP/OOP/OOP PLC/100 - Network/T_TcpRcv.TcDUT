@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="T_TcpRcv" Id="{f9631d0d-83eb-423f-a67d-381d311ac7ed}">
+    <Declaration><![CDATA[TYPE T_TcpRcv : POINTER TO FB_RcvDataBuffer; END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

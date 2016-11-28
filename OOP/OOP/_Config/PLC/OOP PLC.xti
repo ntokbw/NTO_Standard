@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmItem" TcSmVersion="1.0" TcVersion="3.1.4020.0" ClassName="CNestedPlcProjDef">
+	<Project GUID="{49565BFB-7EB0-42C0-998B-8B920ADC6300}" Name="OOP PLC" PrjFilePath="..\..\OOP PLC\OOP PLC.plcproj" TmcFilePath="..\..\OOP PLC\OOP PLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
+		<Instance Id="#x01010010" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+			<Name>OOP PLC Instance</Name>
+			<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+			<Vars VarGrpType="1">
+				<Name>PlcTask Inputs</Name>
+				<Var>
+					<Name>P_System.fbEtherCATStatusDK.AI_DevState</Name>
+					<Comment>
+						<![CDATA[**************************
+ Static variables
+**************************]]>
+					</Comment>
+					<Type>UINT</Type>
+				</Var>
+				<Var>
+					<Name>P_System.fbEtherCATStatusDK.AI_SlaveCount</Name>
+					<Type>UINT</Type>
+				</Var>
+				<Var>
+					<Name>P_System.fbEtherCATStatusDK.AI_CfgSlaveCount</Name>
+					<Type>UINT</Type>
+				</Var>
+			</Vars>
+			<InitSymbols>
+				<InitSymbol>
+					<Name>MAIN.fbTcpClient.oid</Name>
+					<Type GUID="{18071995-0000-0000-0000-00000000000F}">OTCID</Type>
+					<Data>20000101</Data>
+				</InitSymbol>
+			</InitSymbols>
+			<TaskPouOids>
+				<TaskPouOid Prio="20" OTCID="#x01010011"/>
+			</TaskPouOids>
+		</Instance>
+	</Project>
+</TcSmItem>

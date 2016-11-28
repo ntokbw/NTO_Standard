@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="SampleTcpServer" Id="{c76aca86-6bc9-4746-ab00-453567e47368}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+FUNCTION_BLOCK SampleTcpServer EXTENDS FB_Object IMPLEMENTS ITcIoTcpProtocolRecv
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	{attribute 'TcInitSymbol'}
+	oid : OTCID;
+	ipTcp : ITcIoTcpProtocol;
+	socketID : UDINT;
+	sendData : BOOL;
+	dataToSend : U_Data := (sData := 'Sending from here');
+	aLog : ARRAY[0..99] OF ST_Log;
+	nLogEntry : INT := 0;
+	aRcvData : ARRAY[0..99] OF U_Data;
+	nRcvData : USINT;
+	nPort : UINT := 9992;
+	bConnect : BOOL;
+	bIsConnected : BOOL;
+	uRemoteIP : U_IPAddr;
+	nConnectedSocket : UDINT;
+END_VAR
+VAR
+	nSendData : UDINT;
+END_VAR
+VAR
+	nSendData1 : UDINT;
+	nSendData2 : UDINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{6dd3f7d7-7449-4c3d-933f-81cb2feb5a7d}">
+      <Declaration><![CDATA[METHOD INTERNAL Control
+VAR_INPUT
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF socketID <> 0 AND ipTcp <> 0 THEN
+	bIsConnected := Tc3_Module.SUCCEEDED(ipTcp.IsConnected(socketId));
+ELSE
+	bIsConnected := FALSE;
+END_IF
+IF bConnect AND socketID = 0 THEN
+	;//Open socket
+	IF Tc3_Module.SUCCEEDED(ipTcp.AllocSocket(ipRecv := THIS^,socketId := socketID)) THEN		
+		
+		IF Tc3_Module.FAILED(ipTcp.Listen(socketId := socketId, tcpPort := nPort)) THEN
+			ipTcp.FreeSocket(socketID);
+			socketID := 0;
+		END_IF 
+
+	END_IF
+	
+ELSIF NOT(bConnect) AND socketID <> 0 THEN
+	
+	; //Close socket
+	IF Tc3_Module.SUCCEEDED(ipTcp.IsConnected(socketId)) THEN
+		ipTcp.Close(socketId);
+		ipTcp.CheckReceived();
+	END_IF
+	ipTcp.FreeSocket(socketId);
+	socketId := 0;
+	
+ELSIF bConnect AND socketID <> 0 THEN
+
+	;//Check if send data 
+	IF bIsConnected AND sendData THEN
+		nSendData := 0;
+		ipTcp.SendData(socketId := nConnectedSocket, nData := SIZEOF(dataToSend), pData := ADR(dataToSend), nSendData := nSendData);
+		sendData := FALSE;
+	END_IF
+	
+END_IF
+
+ipTcp.CheckReceived();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{cfb9b835-aa09-437f-a42b-a5a26e2fcc5a}">
+      <Declaration><![CDATA[METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ipTcp <> 0 THEN
+	IF socketID <> 0 THEN
+		IF Tc3_Module.SUCCEEDED(ipTcp.IsConnected(socketId)) THEN
+			ipTcp.Close(socketId);
+			ipTcp.CheckReceived();
+		END_IF
+		ipTcp.FreeSocket(socketId);
+		socketId := 0;
+	ELSE
+		FB_exit := TRUE;
+	END_IF
+ELSE
+	FB_exit := FALSE;	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{e8a41c8b-489a-42d2-8391-b297bc733dbd}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+VAR
+	ipSrv : ITComObjectServer;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[sName := 'SampleTcpServer';
+sVersion := '1.0.0.0';
+
+IF Tc3_Module.FW_ObjMgr_GetObjectServer(oidApp := _AppInfo.ObjId, pipSrv := ADR(ipSrv)) = Tc3_Module.S_OK THEN
+	
+	IF ipSrv.TcQueryObjectInterface(oid := oid, iid := IID_ITcIoTcpProtocol, ADR(ipTcp)) = Tc3_Module.S_OK THEN
+		FB_init := TRUE;
+	ELSE
+		FB_init := FALSE;
+	END_IF
+	ipSrv.TcRelease();
+	ipSrv := 0;
+ELSE
+	FB_init := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReceiveData" Id="{3c6acda1-62d2-4ada-bf14-0540d535d9cd}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD ReceiveData : HRESULT
+VAR_INPUT
+	socketId	: UDINT;
+	nData	: UDINT;
+	pData	: PVOID;
+END_VAR
+VAR
+	uData : U_Data := (sData := 'Did you send to me?$n$r'); 
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Tc2_System.MEMCPY(ADR(aRcvData[nRcvData]),pData,MIN(255,nData));
+
+ipTcp.SendData(socketId := socketId, nData := SIZEOF(uData), pData := ADR(uData), nSendData := nSendData1);
+ipTcp.SendData(socketId := socketId, nData := SIZEOF(aRcvData[nRcvData]), pData := ADR(aRcvData[nRcvData]), nSendData := nSendData2);
+
+nRcvData := nRcvData + 1;
+IF nRcvData > 99 THEN
+	nRcvData := 0;
+END_IF
+
+ipTcp.GetRemoteIpAddr(socketId := socketId, remoteIpAddr := uRemoteIP.nIpAddr);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReceiveEvent" Id="{68333274-537f-4349-aa7d-23da43d2f98f}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD ReceiveEvent : HRESULT
+VAR_INPUT
+	socketId	: UDINT;
+	tcpEvent	: TCPIP_EVENT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[aLog[nLogEntry].eTcpEvent := tcpEvent;
+aLog[nLogEntry].nSocketID := socketId;
+nLogEntry := nLogEntry + 1;
+IF nLogEntry > 99 THEN
+	nLogEntry := 0;
+END_IF
+CASE tcpEvent OF
+	TCPIP_EVENT.TCPIP_EVENT_CONN_INCOMING :
+		ipTcp.Accept(socketId);
+		nConnectedSocket := socketID;
+	TCPIP_EVENT.TCPIP_EVENT_CONN_CLOSED :
+		
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TcAddRef" Id="{8fb89b24-f60b-4365-ba6f-2aec74a8f803}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD TcAddRef : UDINT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TcQueryInterface" Id="{af170ffd-6257-45c0-9962-43cdd672aef1}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD TcQueryInterface : HRESULT
+VAR_INPUT
+	iid	: REFERENCE TO IID;
+	pipItf	: POINTER TO PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TcRelease" Id="{836e5b0b-d5c4-4abf-a5d7-00fad06f7e75}">
+      <Declaration><![CDATA[{attribute 'c++_compatible'}
+{attribute 'signature_flag' := '33554688'}
+{attribute 'pack_mode' := '4'}
+{attribute 'show'}
+{attribute 'minimal_input_size' := '4'}
+{attribute 'checksuperglobal'}
+METHOD TcRelease : UDINT
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

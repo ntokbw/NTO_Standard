@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <GVL Name="GVL_HResultError" Id="{a4a9f5d7-ef41-48aa-a364-df15541265a8}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL CONSTANT
+    cHR_ErrGeneral : HRESULT := UDINT_TO_DINT(16#A0000000); //Fail with general error
+    cHR_ErrInvalidParameter : HRESULT := UDINT_TO_DINT(16#A0000001); //Fail with invalid parameters    
+	cHR_ErrConnect : HRESULT := UDINT_TO_DINT(16#A0000002); //Fail, when trying to connect
+	cHR_ErrAllocSocket : HRESULT := UDINT_TO_DINT(16#A0000003); //Fail, when allocating a socket
+	cHR_ErrNotConnected : HRESULT := UDINT_TO_DINT(16#A0000002); //Fail, not connected
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

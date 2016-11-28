@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <GVL Name="GVL_MachineSettings" Id="{587c2004-d953-4ba5-8aac-6fd56b8f4ecc}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL PERSISTENT
+    stSettingsMach01_1 : ST_SettingMachinePart01 := (nMotorType := 0, nCylinderType := 1);
+    stSettingsMach01_2 : ST_SettingMachinePart01 := (nMotorType := 1, nCylinderType := 0);
+    stSettingsMach02_1 : ST_SettingMachinePart02 := (
+		nCylinder1Type := 0, stCylinder1Settings := (bSensorAtOut := TRUE, eEnableMode := E_CylinderEnableMode.eCylEnaToHome),
+		nCylinder2Type := 1, stCylinder2Settings := (bSensorAtOut := FALSE, eEnableMode := E_CylinderEnableMode.eCylEnaToOut));
+    stSettingsMach02_2 : ST_SettingMachinePart02 := (nCylinder1Type := 1, nCylinder2Type := 0);
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

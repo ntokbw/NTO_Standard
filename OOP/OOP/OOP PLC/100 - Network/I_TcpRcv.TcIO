@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <Itf Name="I_TcpRcv" Id="{b0df10c2-e7a4-4918-80ef-0e00e172ad94}">
+    <Declaration><![CDATA[{attribute 'c++_compatible'}
+INTERFACE I_TcpRcv
+]]></Declaration>
+    <Method Name="NewData" Id="{feb9d736-8e26-4640-b8c4-77bf5037c5cd}">
+      <Declaration><![CDATA[METHOD NewData : HRESULT
+VAR_INPUT
+	nData	: UDINT;
+	pData	: PVOID;
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

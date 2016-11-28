@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <DUT Name="ST_StandardCylinderSettings" Id="{79beeacb-4ec0-40d0-b8e1-6f146fdbd028}">
+    <Declaration><![CDATA[///Standard cylinder settings
+TYPE ST_StandardCylinderSettings :
+STRUCT
+    bSensorAtOut : BOOL; ///Cylinder has sensor at out
+    tTimeToOrAtOut : TIME; ///Cylinder at or to out, bSensorOut = true: at out, bSensorOut = false: to out 
+    bSensorAtHome : BOOL; ///Cylinder has sensor at home
+    tTimeToOrAtHome : TIME; ///Cylinder at or to home, bSensorOut = true: at home, bSensorOut = false: to home
+    eEnableMode : E_CylinderEnableMode; ///Cylinder enable mode
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

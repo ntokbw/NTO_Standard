@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4019.2">
+  <POU Name="P_System" Id="{172e9807-e351-4183-add8-3727b6e460be}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM P_System
+VAR_INPUT
+	bWritePersistent: BOOL;
+	bReset: BOOL;
+END_VAR
+VAR_OUTPUT
+	bEtherCAT_Ok: BOOL;
+	bError: BOOL;
+	nErrorID: UDINT;
+END_VAR
+VAR
+	nAlive: UDINT;
+	bFirstScan: BOOL:= TRUE;
+
+//******************************************************************************
+// System	
+//******************************************************************************
+	fbSystemDK: Tc3_System_DK.FB_SystemDK;
+	ipSystemDK: Tc3_System_DK.I_SystemDK:= fbSystemDK;
+	stSystemDK: Tc3_System_DK.ST_SystemDK;  
+	
+//******************************************************************************
+// EtherCAT
+//******************************************************************************
+	fbEtherCATStatusDK: Tc3_System_DK.FB_EtherCATStatusDK;
+	ipEtherCATStatusDK: Tc3_System_DK.I_EtherCATStatusDK:= fbEtherCATStatusDK;
+	stEtherCATStatusDK: Tc3_System_DK.ST_EtherCATStatusDK;
+	
+//******************************************************************************
+// Persistent
+//******************************************************************************
+	fbWritePersistentDataDK: Tc3_System_DK.FB_WritePersistentDataDK;
+	ipWritePersistentDataDK: Tc3_System_DK.I_WritePersistentDataDK:= fbWritePersistentDataDK;
+	stWritePersistentDataDK: Tc3_System_DK.ST_WritePersistentDataDK;
+	
+//******************************************************************************
+// NovRam
+//******************************************************************************
+	fbNovRamDK: Tc3_System_DK.FB_NovRamDK;
+	ipNovRamDK: Tc3_System_DK.I_NovRamDK:= fbNovRamDK;
+	stNovRam: Tc3_System_DK.ST_NovRamDK;	
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[nAlive:= nAlive +1;
+
+// Call actions
+IF bFirstScan THEN
+	A_Init();
+ELSE
+	A_Error();
+	A_Prg();
+END_IF
+]]></ST>
+    </Implementation>
+    <Action Name="A_Error" Id="{fde66fc9-6479-48b7-a31b-8a38f22a3d92}">
+      <Implementation>
+        <ST><![CDATA[//******************************************************************************
+// Error handling
+//******************************************************************************
+bError:= FALSE;
+IF ipSystemDK.P_bError THEN
+	bError:= TRUE;
+END_IF
+IF ipEtherCATStatusDK.P_bError THEN
+	bError:= TRUE;
+END_IF
+IF ipWritePersistentDataDK.P_bError THEN
+	bError:= TRUE;
+END_IF
+IF ipNovRamDK.P_bError THEN
+	bError:= TRUE;
+END_IF
+
+nErrorID:= 16#0000;
+IF ipSystemDK.P_bError THEN
+	nErrorID:= ipSystemDK.P_nErrorID;
+END_IF
+IF ipEtherCATStatusDK.P_bError THEN
+	nErrorID:= ipEtherCATStatusDK.P_nErrorID;
+END_IF
+IF ipWritePersistentDataDK.P_bError THEN
+	nErrorID:= ipWritePersistentDataDK.P_nErrorID;
+END_IF
+IF ipNovRamDK.P_bError THEN
+	nErrorID:= ipNovRamDK.P_nErrorID;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="A_Init" Id="{ed413e47-c82a-4441-a16d-c9296dc86a66}">
+      <Implementation>
+        <ST><![CDATA[
+
+bFirstScan:= FALSE;]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="A_Prg" Id="{6f3ba3b6-0b9d-48b7-8862-605d5606bc4a}">
+      <Implementation>
+        <ST><![CDATA[//	The result of the method is an unsigned double integer
+//	0 = idle 
+//	1 = coupled
+//	2 = starting
+//	3 = running
+//	4 = aborted
+// 	5 = no hardware connected
+//  6 = Spare
+//	7 = pointer or index error
+//	8 = mapping error
+//	9 = parameter error
+//	10 = complete
+//	Any other number = ErrorID
+
+
+//******************************************************************************
+// System
+//******************************************************************************
+
+// Call methods
+stSystemDK.arr_nStatus[1]:= ipSystemDK.M_nEnable();
+stSystemDK.arr_nStatus[2]:= ipSystemDK.M_nCerHost(bEnable:= stSystemDK.bCerHost_Enable, bDisable:= stSystemDK.bCerHost_Disable);
+stSystemDK.arr_nStatus[3]:= ipSystemDK.M_nReset(bExecute:= bReset);
+
+// Get property
+stSystemDK.bReady:= ipSystemDK.P_bReady;
+stSystemDK.bError:= ipSystemDK.P_bError;
+stSystemDK.nErrorID:= ipSystemDK.P_nErrorID;
+stSystemDK.bIs_CE_Device:= ipSystemDK.P_bIs_CE_Device;
+stSystemDK.nAdsPort:= ipSystemDK.P_nAdsPort;
+stSystemDK.nCycleTime:= ipSystemDK.P_nCycleTime;
+stSystemDK.bIs_ARM:= ipSystemDK.P_bIs_ARM;
+stSystemDK.bIs_x86:= ipSystemDK.P_bIs_x86;
+stSystemDK.bIs_x64:= ipSystemDK.P_bIs_x64;
+stSystemDK.sTwinCAT_Version:= ipSystemDK.P_sTwinCAT_Version;
+stSystemDK.stDeviceIdentificationEx:= ipSystemDK.P_stDeviceIdentificationEx;
+
+//******************************************************************************
+// EtherCAT
+//******************************************************************************
+
+// Call methods
+stEtherCATStatusDK.arr_nStatus[1]:= ipEtherCATStatusDK.M_nEnable(bExecute:= TRUE);
+stEtherCATStatusDK.arr_nStatus[2]:= ipEtherCATStatusDK.M_nReset(bExecute:= bReset);
+
+// Get property
+stEtherCATStatusDK.bReady:= ipEtherCATStatusDK.P_bReady;
+stEtherCATStatusDK.bError:= ipEtherCATStatusDK.P_bError;
+stEtherCATStatusDK.nErrorID:= ipEtherCATStatusDK.P_nErrorID;
+stEtherCATStatusDK.bWireBroke:= ipEtherCATStatusDK.P_bWireBroke;
+stEtherCATStatusDK.nDevState:= ipEtherCATStatusDK.P_nDevState;
+stEtherCATStatusDK.nSlaveCount:= ipEtherCATStatusDK.P_nSlaveCount;
+stEtherCATStatusDK.nCfgSlaveCount:= ipEtherCATStatusDK.P_nCfgSlaveCount;
+
+// EtherCAT status
+bEtherCAT_Ok:= ipEtherCATStatusDK.P_bReady;
+
+//******************************************************************************
+// Persistent
+//******************************************************************************
+
+// Set proporty
+ipWritePersistentDataDK.P_eSUPS_Mode:= Tc3_System_DK.eSUPS_WrPersistData_Shutdown;
+
+// Call methods
+stWritePersistentDataDK.arr_nStatus[1]:= ipWritePersistentDataDK.M_nEnable(bExecute:= TRUE, tLogTimePuls:= T#10M);
+stWritePersistentDataDK.arr_nStatus[2]:= ipWritePersistentDataDK.M_nWrite(bExecute:= bWritePersistent);
+stWritePersistentDataDK.arr_nStatus[3]:= ipWritePersistentDataDK.M_n1_second_UPS(bExecute:= TRUE);
+stWritePersistentDataDK.arr_nStatus[4]:= ipWritePersistentDataDK.M_nReset(bExecute:= bReset);
+
+// Get property
+stWritePersistentDataDK.bReady:= ipWritePersistentDataDK.P_bReady;
+stWritePersistentDataDK.bError:= ipWritePersistentDataDK.P_bError;
+stWritePersistentDataDK.nErrorID:= ipWritePersistentDataDK.P_nErrorID;
+stWritePersistentDataDK.bBusy:= ipWritePersistentDataDK.P_bBusy;
+stWritePersistentDataDK.nWriteCNT:= ipWritePersistentDataDK.P_nWriteCNT;
+
+(*
+
+//******************************************************************************
+// NovRam
+//******************************************************************************
+
+// Call methods
+stNovRam.arr_nStatus[1]:= ipNovRamDK.M_nEnable(bExecute:= TRUE, nDevId:= 2, nMB_Offset:= 0, nMB_Size:= 2048);
+stNovRam.arr_nStatus[2]:= ipNovRamDK.M_nReset(bExecute:= bReset);
+
+// Get property
+stNovRam.bReady:= ipNovRamDK.P_bReady;
+stNovRam.bError:= ipNovRamDK.P_bError;
+stNovRam.nErrorID:= ipNovRamDK.P_nErrorID;
+
+*)]]></ST>
+      </Implementation>
+    </Action>
+  </POU>
+</TcPlcObject>
